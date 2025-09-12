@@ -16,6 +16,7 @@ from markllm.utils.transformers_config import TransformersConfig
 import warnings
 import numpy as np
 from functools import lru_cache
+from pipeline import translate
 
 warnings.filterwarnings("ignore")  # transformers logging
 
@@ -155,9 +156,9 @@ def load_file(filename: str, as_json: bool | None = None):
 	else:
 		return path.read_text()
 
-def _make_prompt(text, max_chars=2000):
-	prompt = "Summarize the following article:\n\n" + text[:max_chars]
-	return prompt
+def _make_prompt(text, max_chars=2000, language="english"):
+	trans = translate("Summarize the following text:", language)
+	return trans + "\n\n" + text[:max_chars] 
 
 def split_dataset(dataset, sample_size=100):
 	sample_size = min(sample_size, len(dataset))
@@ -168,20 +169,20 @@ def split_dataset(dataset, sample_size=100):
 	non_watermark_samples = dataset.select(list(non_watermark_idx))
 	return watermark_samples, non_watermark_samples
 
-def split_and_generate(model_components, dataset, sample_size=100, max_chars=2000, workers=4, batch_size: int = 8):
+def split_and_generate(model_components, dataset, language="swahili", sample_size=100, max_chars=2000, workers=4, batch_size: int = 8):
 	"""Split dataset into two halves and generate watermarked and unwatermarked outputs."""
 	watermark_samples, non_watermark_samples = split_dataset(dataset, sample_size=sample_size)
-	det_wm = generate(model_components, watermark_samples, watermark=True, max_chars=max_chars, workers=workers, batch_size=batch_size)
-	det_uwm = generate(model_components, non_watermark_samples, watermark=False, max_chars=max_chars, workers=workers, batch_size=batch_size)
+	det_wm = generate(model_components, watermark_samples, watermark=True, max_chars=max_chars, workers=workers, batch_size=batch_size, language=language)
+	det_uwm = generate(model_components, non_watermark_samples, watermark=False, max_chars=max_chars, workers=workers, batch_size=batch_size, language=language)
 	return det_wm + det_uwm
 
-def generate(model_components, dataset, watermark: bool, max_chars=2000, workers=4, batch_size: int = 8):
+def generate(model_components, dataset, watermark: bool, language='swahili',max_chars=2000, workers=4, batch_size: int = 8):
 	"""Generate either watermarked or unwatermarked outputs for the dataset.
 
 	Uses true batched generation if the wrapped watermark model exposes either
 	`config.generation_model` or `config.model`. Falls back to per-sample threads otherwise.
 	"""
-	prompts = [_make_prompt(item["text"], max_chars) for item in dataset]
+	prompts = [_make_prompt(item["text"], max_chars, language) for item in dataset]
 	n = len(prompts)
 	results: list[dict | None] = [None] * n
 	tokenizer, gen_model, wm = model_components
@@ -253,14 +254,15 @@ def generate(model_components, dataset, watermark: bool, max_chars=2000, workers
 	
 	
 
-def detect(samples, model, workers=4):
+def detect(samples, model, column='generated_text', workers=4):
 	detections = []
+	column = column
 	def work(p):
 		detect = model.detect_watermark(p)
 		detections.append(detect)
 	
 	with ThreadPoolExecutor(max_workers=workers) as executor:
-		futures = [executor.submit(work, p) for p in tqdm(samples)]
+		futures = [executor.submit(work, p[column]) for p in tqdm(samples)]
 		for future in tqdm(as_completed(futures), total=len(futures)):
 			future.result()
 	return detections
