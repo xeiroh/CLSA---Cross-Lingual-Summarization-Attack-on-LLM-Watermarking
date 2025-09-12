@@ -11,24 +11,21 @@ def baseline(language="english",  algorithm="KGW", samples=100, max_tokens=256):
 	idx = np.random.choice(len(dataset), size=samples, replace=False)
 	sample = dataset.select(idx)
 
-	detections = generate(model, sample, max_chars=2000, workers=8)
+	detections = generate(model, sample, max_chars=2000, workers=32, batch_size=16)
 	metrics = evaluate_detection(detections)
 	return detections, metrics
 
 if __name__ == "__main__":
-	detections, metrics = baseline(language="english", algorithm="KGW", samples=100, max_tokens=256)
-	save_file(detections, "results/baseline_detections_KGW.json")
-	save_file(metrics, "results/baseline_metrics_KGW.json")
+	# Use "Unbiased" as the label; tools maps it to the correct implementation
+	algorithms = ["KGW", "Unigram"] #"SIR", "XSIR"]
+	languages = ["english", "swahili", "spanish", "amharic"]
 
-	print("EVALUATION METRICS:", metrics)
-
-	detections, metrics = baseline(language="english", algorithm="UW", samples=100, max_tokens=256)
-	save_file(detections, "results/baseline_detections_UW.json")
-	save_file(metrics, "results/baseline_metrics_UW.json")	
-
-	print("EVALUATION METRICS:", metrics)
-
-	detections, metrics = baseline(language="english", algorithm="X-SIR", samples=100, max_tokens=256)
-	save_file(detections, "results/baseline_detections_X-SIR.json")
-	save_file(metrics, "results/baseline_metrics_X-SIR.json")
-	print("EVALUATION METRICS:", metrics)
+	for lang in languages:
+		for algo in algorithms:
+			try:
+				detections, metrics = baseline(language=lang, algorithm=algo, samples=100, max_tokens=256)
+				save_file(detections, f"baseline_detections_{algo}_{lang}.json")
+				save_file(metrics, f"baseline_metrics_{algo}_{lang}.json")
+				print("EVALUATION METRICS:", metrics)
+			except FileNotFoundError as e:
+				print(f"Skipping {algo} for {lang}: {e}")
