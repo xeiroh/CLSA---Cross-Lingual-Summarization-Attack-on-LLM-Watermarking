@@ -3,6 +3,7 @@ import os
 from datasets.arrow_dataset import Dataset
 from datasets.dataset_dict import DatasetDict, IterableDatasetDict
 from datasets.iterable_dataset import IterableDataset
+from regex import T
 import torch
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
@@ -13,6 +14,7 @@ from transformers import LogitsProcessorList
 from markllm.watermark.auto_watermark import AutoWatermark, WATERMARK_MAPPING_NAMES
 from markllm.utils.transformers_config import TransformersConfig
 import warnings
+import numpy as np
 from functools import lru_cache
 
 warnings.filterwarnings("ignore")  # transformers logging
@@ -21,26 +23,6 @@ warnings.filterwarnings("ignore")  # transformers logging
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print("Using device:", device, "cuda available:", torch.cuda.is_available())
 RESULTS_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "results")
-
-def _normalize_algorithm(name: str | None) -> str | None:
-    """Normalize user-provided algorithm names to library-supported keys.
-
-    - Case-insensitive match of known keys from WATERMARK_MAPPING_NAMES
-    - Common aliases mapped to canonical names (e.g., "Unbiased"/"UW" -> "Unigram")
-    """
-    if name is None:
-        return None
-    s = str(name).strip()
-    if not s:
-        return None
-    for key in WATERMARK_MAPPING_NAMES.keys():
-        if s.lower() == key.lower():
-            return key
-    aliases = {
-        "uw": "Unigram",
-        "unbiased": "Unigram",
-    }
-    return aliases.get(s.lower())
 
 @lru_cache(maxsize=8)
 def load_model(max_tokens=512, algorithm="KGW"):
@@ -70,25 +52,9 @@ def load_model(max_tokens=512, algorithm="KGW"):
 		do_sample=True,
 	)
 
-	# normalize and validate algorithm name
-	alg = _normalize_algorithm(algorithm)
-	if not alg:
-		supported = ", ".join(sorted(WATERMARK_MAPPING_NAMES.keys()))
-		raise ValueError(f"Unsupported algorithm '{algorithm}'. Supported: {supported}. Aliases: UW/Unbiased -> Unigram.")
-
 	# load watermark algorithm (e.g., KGW)
-	try:
-		wm = AutoWatermark.load(alg, transformers_config=transformers_config)
-	except FileNotFoundError as e:
-		if alg == "XSIR":
-			raise FileNotFoundError(
-				"XSIR assets missing. Provide a valid XSIR config with: "
-				"embedding_model_path (e.g., 'sentence-transformers/paraphrase-multilingual-mpnet-base-v2'), "
-				"transform_model_name (.pth), and mapping_name (.json); or exclude XSIR. "
-				f"Original error: {e}"
-			)
-		raise
-	return wm
+	wm = AutoWatermark.load(algorithm, transformers_config=transformers_config)
+	return (tokenizer, model, wm)
 
 def load_data(language="english"):
 	dataset: DatasetDict | Dataset | IterableDatasetDict | IterableDataset = load_dataset("csebuetnlp/xlsum", language, split="test")
@@ -193,78 +159,96 @@ def _make_prompt(text, max_chars=2000):
 	prompt = "Summarize the following article:\n\n" + text[:max_chars]
 	return prompt
 
-def generate(model, dataset, max_chars=2000, workers=4, batch_size: int = 8):
-	"""Generate watermarked texts and run detection.
+def split_dataset(dataset, sample_size=100):
+	sample_size = min(sample_size, len(dataset))
+	idx = np.random.choice(len(dataset), size=sample_size, replace=False)
+	watermark_idx = set(idx[: sample_size // 2])
+	non_watermark_idx = set(idx[sample_size // 2 :])
+	watermark_samples = dataset.select(list(watermark_idx))
+	non_watermark_samples = dataset.select(list(non_watermark_idx))
+	return watermark_samples, non_watermark_samples
 
-	- Uses efficient batched generation when the watermark algorithm exposes a
-	  `logits_processor` and `config` with `generation_model/tokenizer`.
-	- Falls back to per-sample generation (optionally threaded) otherwise.
+def split_and_generate(model_components, dataset, sample_size=100, max_chars=2000, workers=4, batch_size: int = 8):
+	"""Split dataset into two halves and generate watermarked and unwatermarked outputs."""
+	watermark_samples, non_watermark_samples = split_dataset(dataset, sample_size=sample_size)
+	det_wm = generate(model_components, watermark_samples, watermark=True, max_chars=max_chars, workers=workers, batch_size=batch_size)
+	det_uwm = generate(model_components, non_watermark_samples, watermark=False, max_chars=max_chars, workers=workers, batch_size=batch_size)
+	return det_wm + det_uwm
+
+def generate(model_components, dataset, watermark: bool, max_chars=2000, workers=4, batch_size: int = 8):
+	"""Generate either watermarked or unwatermarked outputs for the dataset.
+
+	Uses true batched generation if the wrapped watermark model exposes either
+	`config.generation_model` or `config.model`. Falls back to per-sample threads otherwise.
 	"""
 	prompts = [_make_prompt(item["text"], max_chars) for item in dataset]
+	n = len(prompts)
+	results: list[dict | None] = [None] * n
+	tokenizer, gen_model, wm = model_components
+	model = wm  # for clarity
 
-	# Prefer batched path when available (handles KGW, UW, X-SIR, SWEET, etc.)
-	can_batch = hasattr(model, "logits_processor") and hasattr(model, "config") \
-		and hasattr(model.config, "generation_model") and hasattr(model.config, "generation_tokenizer")
+	cfg = getattr(wm, "config", object())
+	logits_proc = getattr(wm, "logits_processor", None)
+	can_batch = gen_model is not None and tokenizer is not None
 
-	detections: list[dict] = []
-
-	if can_batch and (batch_size or 0) > 1:
-		gen_model = model.config.generation_model
-		tokenizer = model.config.generation_tokenizer
-		mdl_device = getattr(model.config, "device", None) or globals().get("device", "cpu")
-
+	if can_batch:
+		gen_model.eval()
+		# Ensure model is on the right device (HF models use .to)
 		try:
-			gen_model.eval()
+			gen_model.to(device)
 		except Exception:
 			pass
-		try:
-			torch.set_grad_enabled(False)
-		except Exception:
-			pass
+		max_new = int(getattr(cfg, "max_new_tokens", 128))
 
-		for start in tqdm(range(0, len(prompts), batch_size)):
-			batch_prompts = prompts[start:start + batch_size]
-			enc = tokenizer(
-				batch_prompts,
-				return_tensors="pt",
-				padding=True,
-				truncation=True,
-				add_special_tokens=True,
-			).to(mdl_device)
+		for start in tqdm(range(0, n, batch_size), desc="Batched generation"):
+			end = min(start + batch_size, n)
+			batch_idx = list(range(start, end))
+			texts = [prompts[i] for i in batch_idx]
 
-			outputs = gen_model.generate(
-				**enc,
-				logits_processor=LogitsProcessorList([model.logits_processor]),
-				**getattr(model.config, "gen_kwargs", {}),
-			)
-			texts = tokenizer.batch_decode(outputs, skip_special_tokens=True)
+			enc = tokenizer(texts, return_tensors="pt", padding=True, truncation=True)
+			enc = {k: v.to(device) for k, v in enc.items()}
 
-			for text in texts:
+			use_lp = (watermark and logits_proc) and LogitsProcessorList([logits_proc]) or None
+
+			with torch.inference_mode():
+				out = gen_model.generate(
+					**enc,
+					max_new_tokens=max_new,
+					do_sample=True,
+					logits_processor=use_lp,
+					use_cache=True,
+					num_beams=1,
+				)
+
+			dec = tokenizer.batch_decode(out, skip_special_tokens=True)
+			for i, text in zip(batch_idx, dec):
 				det = model.detect_watermark(text)
-				det["watermarked_text"] = text
-				det["true_label"] = True
-				detections.append(det)
-		return detections
+				det["generated_text"] = text
+				det["true_label"] = watermark
+				results[i] = det
 
-	# Fallback: per-sample generation (optionally threaded)
-	def work(p):
-		watermarked = model.generate_watermarked_text(p)
-		det = model.detect_watermark(watermarked)
-		det["watermarked_text"] = watermarked
-		det["true_label"] = True  # all generated texts are watermarked
-		detections.append(det)
+		return [r for r in results if r is not None]
 
-	if workers is None or workers <= 1:
-		for p in tqdm(prompts):
-			work(p)
-	else:
-		with ThreadPoolExecutor(max_workers=workers) as executor:
-			futures = [executor.submit(work, p) for p in tqdm(prompts)]
-			for future in tqdm(as_completed(futures), total=len(futures)):
-				future.result()
+	# Fallback threaded path
+	def work(idx: int):
+		p = prompts[idx]
+		gen = (
+			model.generate_watermarked_text(p)
+			if watermark
+			else model.generate_unwatermarked_text(p)
+		)
+		det = model.detect_watermark(gen)
+		det["generated_text"] = gen
+		det["true_label"] = watermark
+		return idx, det
 
-	return detections
+	with ThreadPoolExecutor(max_workers=workers) as ex:
+		futures = [ex.submit(work, i) for i in range(n)]
+		for fut in tqdm(as_completed(futures), total=len(futures), desc="Threaded generation"):
+			idx, det = fut.result()
+			results[idx] = det
 
+	return [r for r in results if r is not None]
 	
 	
 	
@@ -280,7 +264,3 @@ def detect(samples, model, workers=4):
 		for future in tqdm(as_completed(futures), total=len(futures)):
 			future.result()
 	return detections
-
-
-if __name__ == "__main__":
-	pass

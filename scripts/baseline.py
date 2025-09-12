@@ -1,4 +1,4 @@
-from tools import load_model, load_data, generate, detect, save_file, load_file
+from tools import load_model, load_data, generate, detect, save_file, load_file, split_and_generate
 from evaluation import evaluate_detection
 import numpy as np
 
@@ -7,11 +7,10 @@ def baseline(language="english",  algorithm="KGW", samples=100, max_tokens=256):
 	dataset = load_data(language)
 
 	# Efficient random sample using indices to avoid materializing the whole dataset
-	samples = min(samples, len(dataset))
-	idx = np.random.choice(len(dataset), size=samples, replace=False)
-	sample = dataset.select(idx)
 
-	detections = generate(model, sample, max_chars=2000, workers=32, batch_size=16)
+	# Interleave to form a mixed list (order not important for metrics)
+	detections = split_and_generate(model, dataset, sample_size=samples)
+
 	metrics = evaluate_detection(detections)
 	return detections, metrics
 
