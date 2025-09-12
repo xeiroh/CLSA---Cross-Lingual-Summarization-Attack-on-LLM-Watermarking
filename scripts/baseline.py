@@ -17,7 +17,7 @@ def baseline(language="english",  algorithm="KGW", samples=100, max_tokens=256):
 
 if __name__ == "__main__":
 	# Use "Unbiased" as the label; tools maps it to the correct implementation
-	algorithms = ["KGW", "Unigram"] #"SIR", "XSIR"]
+	algorithms = ["KGW", "Unigram", "SIR", "XSIR"]
 	languages = ["english", "swahili", "spanish", "amharic"]
 
 	for lang in languages:

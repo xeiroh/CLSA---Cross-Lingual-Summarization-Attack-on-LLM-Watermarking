@@ -1,6 +1,5 @@
 # minimal example sketch (adapt paths/models to your GPU/CPU)
 import os
-from xml.parsers.expat import model
 from datasets.arrow_dataset import Dataset
 from datasets.dataset_dict import DatasetDict, IterableDatasetDict
 from datasets.iterable_dataset import IterableDataset
