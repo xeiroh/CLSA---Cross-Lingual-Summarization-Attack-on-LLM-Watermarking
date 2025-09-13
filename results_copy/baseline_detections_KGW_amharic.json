@@ -1,0 +1,602 @@
+[
+  {
+    "is_watermarked": false,
+    "score": 0.0,
+    "generated_text": "The gas fire after a fire at an Essex power station has been extinguished.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 2.8735244660769563,
+    "generated_text": "A UK shipment of aid has arrivedarin to India's hospitals after more than a week of chaos, with many patients still hoping to have coronavirus.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 2.8490144114909484,
+    "generated_text": "Following a death, the tragic moment of the wheat tree had it started with thousands of craft boxes to raise funds for ill child abuse. The anniversary goes on in Norfolk three years after the last one. We also share the experience and dozens of things to remind it of children who were alive abroad.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 3.8996021017180893,
+    "generated_text": "The Labour party has warned that small business companies are facing new growth if they cut rate plans and could fall into administration.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 2.8867513459481287,
+    "generated_text": "Facebook has warned its \"significant increased risk\" in reports of paedophiles by ending to end encryption.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 1.7149858514250882,
+    "generated_text": "Hundreds of households are expected to recover from a large wildfire that has swept about 60 miles (13km) from Dartmoor in Essex.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 3.307475463158259,
+    "generated_text": "The Western Union Human Rights Commission says it is serious about the violence between authorities and suspected security personnel who were armed on Wednesday.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.0,
+    "generated_text": "The Isle of Man's public bird watchdog has recorded a record  number of red-footed-eagle falcons.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 2.694079530401624,
+    "generated_text": "The three leading political parties have been electing candidates for the Humberside police commissioner. The election will begin last Sunday morning.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.2581988897471611,
+    "generated_text": "Here is a \u133d\u1211\u134ba featuring Richard Attenborough.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 2.28747855498907,
+    "generated_text": "The families of a serial rapist who died in Birmingham in 2012 have offered their children each 500,000 dollars to join the Crimestoppers charity to catch up in the case.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": true,
+    "score": 4.130921946615823,
+    "generated_text": "A student has been jailed for a \"brutal, unintended and sexist\" attack involving Manchester City FC striker Jose Muamba.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 3.412500738508723,
+    "generated_text": "The abuse of drugs over \"sub-human\" people and not be putting drug addiction too far, according to a think tank.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": true,
+    "score": 5.337745350213779,
+    "generated_text": "The White House of President Donald Trump must be at the closeest spot in preparation for seizing an immigration deal , he says. Now he is trying to meet its right, not only faces his latest challenges when the issue gets the greatest challenge.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 1.7888543819998317,
+    "generated_text": "Former Transport Minister Alan Wolmar has confirmed there will be an election for Labour in May.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 2.5018511664883785,
+    "generated_text": "Animated characters from the animated series Tintin have been among the 10 films in \u043d\u043e\u043c\u0438\u043dation to the 2017 visual \u044d\u0444\u0444\u0435\u043a\u0442 award.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 2.334868926348074,
+    "generated_text": "South Korea has criticised Pyongyang's UK-approved rocket, saying that it has used \"more precisely\" ballistic missiles.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 1.6035674514745464,
+    "generated_text": "A set of dog thefts are being ordered to stop.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": true,
+    "score": 4.115966043420212,
+    "generated_text": "US media have marked one of the last moments in a concert after one people were seen performing on one concert by two of Prince Louis' closest mates.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 2.5584085962673253,
+    "generated_text": "The BBC's Welsh and English news weekly have been created by a technology-powered machine.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": true,
+    "score": 5.300713251592634,
+    "generated_text": "The news was in earnest and has been really astonishing - and many viewers are pretty nervously accused of seeing trolls who are targeting them an online question. The actress Tom Watson says he will not just be taking to social media without warning. Here explains how she felt being \"caught up in some issues\"",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 3.1304951684997055,
+    "generated_text": "A survey is under way bringing dog theft into force to a \"devastating crime\".",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 2.794782784191074,
+    "generated_text": "An apparent number of patients with long-term certainties this week have had their Covid vaccine vaccinations postponed in Birmingham, Scrubbing Up says.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 3.156820749009882,
+    "generated_text": "Taxpayers receiving more than \u00a31.6bn will not be paid ahead of the financial year, according to government statistics.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": true,
+    "score": 4.2581774824093594,
+    "generated_text": "Russia has suspended a rebel-held Aleppo town's deployment to troops who were surrounded with rubble fire, saying five rebels and their children have been hurt in the bomb attack and two warplanes attacked there.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 2.3570226039551585,
+    "generated_text": "Archaeologists are searching for treasure from a previously unsolved Roman find.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 3.983456354511982,
+    "generated_text": "It was the great theatre day my love. My eyes were turned out to be going through, getting a new nickname or seeing Leonardo DiCaprio playing ball? Where could the latest selfie be detected?",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 3.640679257301507,
+    "generated_text": "President Donald Trump's impeachment trial by the chamber of the US Senate resumes on Tuesday, in a speech on the case of election fraud. The full text to these questions tells the full guide of our weekly political circle.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 3.8334908600273256,
+    "generated_text": "An okinawaian driver jailed for driving a vehicle to have his licence turned away from the roof of the boot said he believed his father had been killed in while on the road.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 3.211586167968363,
+    "generated_text": "A man who fled a flight to Spain because he travelled back to Britain when his employer told him he was homeless is to be held.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 1.8,
+    "generated_text": "A north-east London prison says it is not being put at \"safe targets\" for young adults.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 2.745625891934577,
+    "generated_text": "The UK will stay behind international developments after talks with Russia on his call for more support for Syrian troops.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 2.694079530401624,
+    "generated_text": "A group of nursery school principals in Belfast are demanding school pupils reopen without having to put on the transfer test on Wednesday.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 2.5955427380922007,
+    "generated_text": "A review has criticised the mental health services for two young offenders at the Northern Londonderry Haven prison after they died in the first three months of custody.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": true,
+    "score": 4.714951667914447,
+    "generated_text": "The Conservatives in Northern Ireland are set to make elections ahead of the 24 August general election, despite all councillors to be prosecuted. Where do these cases come and will the BBC report on the next year?",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 2.82842712474619,
+    "generated_text": "The French government has insisted there will be no vote when the UN says it is willing to reach the fate of the United Nations.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 2.2936585546278225,
+    "generated_text": "The Isle of Man has confirmed more than 50 new cases of the Covid-19 cluster on the island.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 2.556038601690775,
+    "generated_text": "The inclusion of tougher stop and search powers in London could save the lives of thousands of people, according to researchers.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.1643989873053573,
+    "generated_text": "The Foreign Minister of Libya has sued the government of all west African countries over the controversial plan to dismantle illegal immigration after the EU rejected it.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 3.6666666666666665,
+    "generated_text": "Dutch National Services (NS) has stopped running the trains for deporting Nazis in a campaign run by former Ajax physiotherapist Salo Muller.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 3.1235807588017885,
+    "generated_text": "An authority staffwoman repaid over \u00a39,000 for her former county pension payout after failing to receive compensation but continued to get paid once they resign.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 1.7056057308448833,
+    "generated_text": "The UK government has published a new range of data information vulnerabilties to address consumers and hackers.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 2.6,
+    "generated_text": "The mother of two Britons murdered in Thailand 2014 said her funeral has been held \"in unorthodox circumstances\".",
+    "true_label": true
+  },
+  {
+    "is_watermarked": true,
+    "score": 4.427188724235731,
+    "generated_text": "The deputy depute first minister has criticised the Department of Health at the end of the current bill on free abortions, in a move she has been calling \"very regrets\".",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 1.5689290811054724,
+    "generated_text": "A new body is under way with Cardiff and three other educational institutions - one moving from a traditional college.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 2.0426487199475707,
+    "generated_text": "A former MEP to be involved with journalist Chris Huhne wanted to sign points, a court heard, in January.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 3.5496478698597698,
+    "generated_text": "The EU is not interested in talks about \"any alternative\" Brexit, Foreign Secretary Michael Gove has warned while EU efforts are steady.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.8703882797784892,
+    "generated_text": "The Swedish Academy of Literature has been given free speech from rapper and writer Bob Dylan later to congratulate him on the Nobel Prize.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 2.743977362280141,
+    "generated_text": "Hungary's ruling leader Viktor Orban has been given suspension from its main right-wing Fidesz party at the  end of the European elections in May.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 3.05085107923876,
+    "generated_text": "The Secretary of State has announced the latest government funding plan for Scottish railway services. This is reflected around the new financial year, including a \u00a370m package of new services for track and signalling maintenance,",
+    "true_label": true
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.0,
+    "generated_text": "A \"person off\" of street lights could be installed at main streets across Caerphilly if plans are approved.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -1.299867367239363,
+    "generated_text": "A Japanese volcano has erupted near a popular mountain in central Japan, causing the death of another man, reports say.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -0.50709255283711,
+    "generated_text": "More than one million children in care in England in 2017 are to leave their home again in stable home to be offered the right chance to come home instead.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -1.2247448713915892,
+    "generated_text": "A fifth person to be arrested over the death of a man died in Sheffield, police have said.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -0.7559289460184544,
+    "generated_text": "Gabon's electoral court has rejected an appeal by President Daniel Bongo for a free recount in elections.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.0,
+    "generated_text": "David Hockney is to stand up for a controversial documentary on his homecoming home at Bridlington in London later this month.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.0,
+    "generated_text": "A town's largest water park is reopening, its landmark memorial has completed.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -0.6488856845230502,
+    "generated_text": "South-east Sudan's President Mahinda Rajapaksa said that \"there will be a huge bloodbath\" if talks over the suspension of Parliament be implemented.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -1.4795908857482156,
+    "generated_text": "Several people killed at Manchester Arena last year were treated at the scene of the Manchester City bombing, a former senior North West \u0430mbulance officer has said.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -0.8980265101338746,
+    "generated_text": "The Welsh assembly despite its more female parliamentarians, a former AM has said the devolution can be taken away.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.3922322702763681,
+    "generated_text": "A driver who caused the death of a fellow passenger in Brighton has been jailed for three and five years.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -0.2773500981126146,
+    "generated_text": "A new housing site has been proposed in Shropshire.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.5773502691896257,
+    "generated_text": "The government has said it would build 300 houses for asylum seekers amid delays in its housing strategy.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -1.2792042981336627,
+    "generated_text": "A former Conservative MP has called for the transfer of transliferants to male prisons.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.0,
+    "generated_text": "Thousands of people have marked the 80th anniversary of a couple died in the midst of World War One.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.1796053020267749,
+    "generated_text": "Pakistani people suing for a rare blood donor waiting to get treatment has been told she can do more than two years is alive.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 1.7320508075688772,
+    "generated_text": "E-commerce, internet, social media. No matter where else on the internet you've been deducted to be famous.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.0,
+    "generated_text": "Left-wing ascensionist northern Mexican Andres Manuel L\u00f3pez Obrador has won the Sunday presidential election",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.6324555320336759,
+    "generated_text": "Australia's newly elected leader has accused Senator Scott Morrison of making \"nonsense\" remarks on the worst bushfires which erupted in Hawaii.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 1.0425720702853738,
+    "generated_text": "A Powys estate is bid to enjoy stargazing under a prestigious international dark sky exhibition.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -1.0425720702853738,
+    "generated_text": "Two men have pleaded guilty to killing and injuring a man in an apparent racial attack.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -0.7071067811865475,
+    "generated_text": "The Trump administration says it will scrap more guidelines on college admissions, following legal scrutiny, to raise pressure for affirmative action.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 1.1766968108291043,
+    "generated_text": "An Ebla MSP has suggested there will be no constitutional referendum on Scottish independence due to the coronavirus pandemic.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -0.6859943405700353,
+    "generated_text": "A \u00a312bn scheme to transform a bronze fen in Cambridge could be approved on time, London's English Heritage organisation has explained.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.34299717028501764,
+    "generated_text": "One group of British bands (or superfed) have been interviewed to describe their advantages and benefits as being \"a superfan\".",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -1.4,
+    "generated_text": "The UK will provide passengers with a blood test for travel to areas where Ebola is spreading.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.4082482904638631,
+    "generated_text": "A lecture about the Nobel Prize-winning poet Simon Armitage will be given to the university of Oxford this summer.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -0.15617376188860607,
+    "generated_text": "The director of The Last Tango Bernardino Bertolucci will be recognised for his roles at this year's Cannes film festival will have a special role, Italian media have confirmed.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.0,
+    "generated_text": "Sir Paul McCain said he was left \"brutal\" when she emerged as the singer of The Beatles.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 1.7677669529663687,
+    "generated_text": "The government has offered free jobs to British Steel at the weekend after talks between its main supplier Jingye Group and management failed to agree terms.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 1.4433756729740645,
+    "generated_text": "Campaigners across England have joined forces to raise cash from items such as a famous dance play at Bradford City club's footsteps when the fire flared at their stadium in 1985.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -2.3533936216582085,
+    "generated_text": "Dippy, the dinosaur is standing as the first skeleton to be reunited with the world at the National History Museum.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 1.3719886811400706,
+    "generated_text": "Almost eight schools, at the centre of a crackdown against controversial buildings, have been closed in Edinburgh following an unsafe year.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.31622776601683794,
+    "generated_text": "The shadow chancellor has accused the government of bringing \"scapegoats\" to the hospitality sector by allowing bar customers to hold up for the 20 minutes of a curfew.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -0.5570860145311556,
+    "generated_text": "South Africa says it \"will be a long time in hell\" if it does not be more racist than becomes normal.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.3651483716701107,
+    "generated_text": "The Isle of Man will have its \u00a32m emergency healthcare home \"brought\" in to replace Noble's Hospital in Dumfries.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -1.299867367239363,
+    "generated_text": "The Democratic Unionist Front (DUP) has said its party will continue to stick with its principles over uncertainties over \"backs\".",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -0.7071067811865475,
+    "generated_text": "Running, parking or swimming is \"extremely effective\" for those who are losing cancer, according to a study of cancer prevention.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -0.8846517369293828,
+    "generated_text": "A battle in a first week is often clear. Do voters are up for attacks, unless they get their seats announced this evening, or will the debate is unclear enough.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.17407765595569785,
+    "generated_text": "Following calls for an inquiry into why junior medical trainees at a hospital were left in adequate supervision in the NHS.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -1.671258043593467,
+    "generated_text": "Britain has been accused of heading for big UK research projects - but claims the UK now has enough to cope with it.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -1.0,
+    "generated_text": "A simple \"microbiome\" from an individual could help men cut weight and shed pounds, the BBC reports.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -0.7808688094430304,
+    "generated_text": "A widow of a war veteran has said she is threatened by moving to withdraw the military pension after seeing her husband died in the Falklands before the end of 2017.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -0.35355339059327373,
+    "generated_text": "Proposals for a major design slash to the Isle of Wight's latest ferry have been described as \"scandalous\".",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -0.7276068751089989,
+    "generated_text": "Irish and newly-appointed singer Brian Coll has died aged 85.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.7559289460184544,
+    "generated_text": "The British riding recordist Dave Beaumont has been named at a ceremony in cycling's 90th anniversary.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -1.6666666666666667,
+    "generated_text": "\"It's a simple type of screening,\" says Dr Phillipa Kaye, known as the MBE - its therapist for cervix scans.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": 0.3779644730092272,
+    "generated_text": "Here are five things you need to know about the coronavirus outbreak this Wednesday morning. We'll have another update for you on Tuesday.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -0.1643989873053573,
+    "generated_text": "Russian forces are deploying weapons in Montenegro but this is nothing longer than a military exercise against Serbia in response to Hurricane Terminators.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": false,
+    "score": -0.282842712474619,
+    "generated_text": "A fresh inquest will resume in Surrey today over the Guildford pub bombs, but could also be held in a case involving IRA bombers who were wrongly convicted following the 1974 pub attacks.",
+    "true_label": false
+  }
+]

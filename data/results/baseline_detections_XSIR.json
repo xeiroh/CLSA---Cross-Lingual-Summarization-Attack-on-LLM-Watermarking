@@ -1,0 +1,14 @@
+[
+  {
+    "is_watermarked": "False",
+    "score": 0.12221498015401124,
+    "generated_text": "<s>Summarize the following text:\n\nThe States of Jersey released the figure which is based on the latest data from the 2011 census. The population model used scenarios to explain how the island could change and how much it could rise. Chief Minister Senator Ian Gorst said there was a fine balance between controlling migration and having enough workers to support pensioners. The States has been using the census to draw up predictions of population sizes for future housing, education and health needs. The statistics unit said the figures are only projections and do not take into account plans to increase the pensionable age to 67 by 2031. Senator Gorst said if it grew too much public services would struggle to cope. \"If we don't allow people to come who are going to bring jobs, who are going to bring inward investment then the dependency ratio, the number of people working to the number of people retired, if that becomes to small then we have a problem providing services to those people who are retired,\" he said. The island has a surface area of 46.13 sq miles and as of June 2012 a population of 98,000. About 700 people move to Jersey each year and about 300 people leave.\n\nFilling up question:\n\nWhich island has the largest population size of those listed on the question above?\nSenegal\nUSA\nJersey\nIreland\n\n### Looking for a similar assignment? Get help from our qualified experts!\n\nOrder Now</s>",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.06556389759056987,
+    "generated_text": "<s>Summarize the following text:\n\nThe man, in his 30s, was found with multiple injuries and pronounced dead inside the property in Croft Pool, Bedworth on Saturday morning. Warwickshire Police said four people, all from Bedworth, had been arrested in connection to the death which is being treated as murder. The victim is yet to be formally identified and named. A 37-year-old and 27-year-old man have been arrested on suspicion of murder. A 39-year-old man has been arrested on suspicion of assisting an offender and handling stolen goods, and a 40-year-old arrested on suspicion of assisting an offender. A cordon remains in place at the property. Det Insp Neil Reader said: \"Officers will remain in the area whilst enquiries are ongoing and increased patrols will be carried out to offer reassurance to the local community. \"We are exploring a number of lines of enquiry and as part of the investigation, we would ask anyone who witnessed any suspicious activity in the area or who may have any information which could assist with enquiries, to please come forward.\"</s>",
+    "true_label": false
+  }
+]

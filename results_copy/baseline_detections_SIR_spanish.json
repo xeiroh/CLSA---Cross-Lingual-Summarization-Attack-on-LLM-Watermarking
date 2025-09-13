@@ -1,0 +1,602 @@
+[
+  {
+    "is_watermarked": "True",
+    "score": 0.4702271898587545,
+    "generated_text": "Amazon founder Amazon Jeff Bezos is to launch and give $2bn ($3.2tn) to fund new charity, in response to mounting pressures from the country's state media.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.5050822217017412,
+    "generated_text": "A problem in the way Google computers and Adobe's iCloud store service and service card store, inaccurate, will affect the prospects of the marketing industry, investigatory staff warned.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.5270330429077148,
+    "generated_text": "Esta semana m\u00e1s de 4.000 American airlines were in the government's planned payroll bailout. The deal will result in US taxpayers' pay, the FBI takes in statements saying: \"Save the lives\" from the pandemic and in a \"total state of the UK.\"",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.14285558887890407,
+    "generated_text": "Los hospitals in Shropshire, Shampiyona and Shrunkford Hospitals received Covid-19 tests in earlier month, the health trust said.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.2816992131146518,
+    "generated_text": "En este video, los periodistas de la BBC te ayudan a practicar y practican in Australia porque pensan un problema in the country.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.35938304976413127,
+    "generated_text": "Detained inmates in an Afghan prison run by Taliban insurgents have been handed over by the US to Afghan security forces, the BBC understands.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.6190476076943534,
+    "generated_text": "A cull of badgers in West Somerset after planned killing by free shots is to bring \"no new restrictions\", the government is indicated.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.4073119649180659,
+    "generated_text": "En esta nueva serie, los periodistas de la BBC te ayudaron a practicar ingl\u00e9s con sus nuevos tutoriales con un m\u00e1s completo problema de Alzheimer's disease.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.20004913091659546,
+    "generated_text": "En esta nueva serie, los periodistas de la BBC te ayudan a practicar ingl\u00e9s con los titulares de los informes sobre la actividad in esta semana.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.3457090097504693,
+    "generated_text": "Suspected Sikh military forces' decision to storm an Indian Golden Temple in the Indian port city of Punjab wiped out the Sikhs, an ex-soldier with links with the Muslim Sheria Party (LMN) says.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.40749969085057575,
+    "generated_text": "Una Euromillions jackpot jackpot bought in Dorset last month has been held by the lottery as it received the potential \"inaccurate\" prize money claimed in the draw.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.577759094098035,
+    "generated_text": "Elton John will make history with one of the UK's best-selling films in the movie, The Diving Board, at the 2019 Mercury Prize in TV. \u0c08 details will be published in September.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.6470589252079234,
+    "generated_text": "Chloe Zhao has been shortlisted for best Chinese comedy in this year's Golden Globes, giving her the title in the news:",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.5555548932817247,
+    "generated_text": "Lorrysome texts sent out by TSB's customers to a customer were not sent when the data was found and the bank has been targeted by customers, the BBC understands.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.38241386562585833,
+    "generated_text": "The waterways in Cornwall will be placed under an EU ban from 31 March, BBC Wales understands.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.5260776737157036,
+    "generated_text": "Un soundtrack and studio track by DJ Bruno Mars are all about new hip-hop culture by leaving Mr \u041c\u0430\u043a\u0441 away for decades.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.5621737856417894,
+    "generated_text": "Durante the historic appearances of North Korean leader Kim Jong-un over the last five days, the youngest leader of the country, will only be a leader from North America, new research suggests.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.5644129663705826,
+    "generated_text": "The motorcycle that crashed into the cinema in 1961, that was ridden in The Wire, is back inexhibiting in a Royal Collection of A Antiques.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.42862377119691747,
+    "generated_text": "Paramedics, officials and traders stopped new contacts with the UK's central bank, BTMU, from doing business, an independent report found.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.46666666865348816,
+    "generated_text": "En esta nueva serie, Vladimir Putin's CCTV pass will be removed from the KGB Records Agency following police brutality in East Germany in the 1980s, reports the Stasi.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.28585616818496157,
+    "generated_text": "Nepal is set to go to a clean up process for six peaks about the world's top, claiming they can be ridden of large quantities of rubbish.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.11651928115774084,
+    "generated_text": "En esta nueva serie, los corresponsalarios de la BBC te ayudan a practicar ingl\u00e9s con los titulares de los nuevos documentos. Mira el siguiente art\u00edculo.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.03600004785939267,
+    "generated_text": "A new survey highlighted by Ulster Bank in Northern Ireland shows economic and employment growth was continuing, a data analysis indicate.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.6547404774304094,
+    "generated_text": "Spanish President Muhammadu Buhari and officials at a Victorian zoo in Somerset are to join in rehome 6 animal lions who were seen in one of Europe's major animal reserves last year.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.31097022791703544,
+    "generated_text": "\u0627\u06cc\u0646 art\u00edculo foiled by: The Care Quality Commission (CQC) inspectors found that \"there is an issue that is not enough\" for hospitals in West Yorkshire.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.2852134427853993,
+    "generated_text": "Investigative evidence they found by policing for young people in police custody is \"highly devious\", the Scottish Prison Service (SPS) said, according to a report.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.09110770171338861,
+    "generated_text": "En esta nueva serie, los periodistas de la BBC te ayudan a practicar ingl\u00e9s con los titulares de las pol\u00edticas de George Osborne.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.2766256680091222,
+    "generated_text": "El documental ingl\u00e9s es del portal del BBC Mundo sobre la contrataci\u00f3n de engineers de BT.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.6547388008662632,
+    "generated_text": "Sir Paul McCain has announced that he \"was not in your position\" as the Beatles comes from an album made by a couple of guitarists.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.6378942653536797,
+    "generated_text": "A selection of stars from top 100 countries and organisations in the Royal Navy's Birthday Honours lists, sent in from South Wales, go through the public service.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.20676601289407068,
+    "generated_text": "Ahead of India's general election, Mulayam Singh Yadav has said that ethnic and cultural equality should be made as \"a mistake in the party\".",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.20000001192092895,
+    "generated_text": "En esta nueva serie, las informa\u00e7\u00f5es que aprenden a nuevo episodio:",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.4897750988602638,
+    "generated_text": "Divorce, medicine, pensions, transport and education are the vital parts of the system for access to broadband in the West African country, the government has ruled out.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.3949272037932166,
+    "generated_text": "Se, e can o no te, te can, you'll have a palabra when you see. De repent, \u00a1Being the Beast!",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.6754433390769091,
+    "generated_text": "The BBC will consult with the global chef Jamie Oliver on 29 June, the BBC's Mark The Beech is in the news next week. Already you have seen some details of how Oliver'\u0629 business will affect the business, here is the full full report.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.07021125338294289,
+    "generated_text": "Para conocer el \u0432\u0438\u0434\u0435\u043e del \"tsunami astral\", del BBC Investigatory Radio 5 (BBC Two) en esta ma\u00f1ana.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.19975322087605793,
+    "generated_text": "Nobby, who plays Sacha Baron Cohen in the new film Friends, has defended his response to the decision to do it.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.4797375425696373,
+    "generated_text": "As Radiohead's David Johnson delivered a concert in Toronto in 2012, their new frontman Thom Yorke told fans he is too sad to hear his death.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.6638202391126576,
+    "generated_text": "Alex Salmond had been one of the most personal supporters in the Scottish government since his retirement. He faced three days, but it may not feel like he would be too late to announce the terms.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.3006588107063657,
+    "generated_text": "El proceso the UK withdrawal from the EU will end in 11 December after more than six \u09ae\u09be\u09b8s, but it is much less being discussed than last year. Here are some of the steps that have been made from EU and customs policy.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.5436539524479916,
+    "generated_text": "Stephen Harper, the leader of the Scottish Conservatives, has been reelected as an MP in the November 2016 general election, Bloomberg confirmed.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.032974026032856533,
+    "generated_text": "Devon punk band Muse says they will finally be releasing their new album \"September and October\" this year.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.07497980044438289,
+    "generated_text": "Felipe VII, a 71-year-old son of Prince Juan Carlos, is the new king of Spain.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.14073193185031413,
+    "generated_text": "The peer who is trying to cut the number of suicides in prison has criticised public services for not ending up in the same system.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.19999712705612183,
+    "generated_text": "El video de la new serie de Taylor Swift and Katy Perry:",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.44086701340145534,
+    "generated_text": "Una s\u00e9rie of violent protests against the newly appointed territory of Hong Kong's government were carried out last week by a group of anti-government protesters in Brighton, China, the BBC'\u0c38\u0c4d Michael Madden explores what happened to protestors in Hongkong this week.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.27272176200693304,
+    "generated_text": "As the public announces the merger of Aberdeen Asset Management, you can view the full \u0c35\u0c3f\u0c35\u0c30y.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.3224151319962867,
+    "generated_text": "The trafficking of motorcyclists that take over the Channel before trying to cross the English Channel in August is \"a culture of waste\", the BBC's Alex Morrison and the Mayor of Dunkirk in Calais, in a response kepada traffickers in the area.",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.22059670778421256,
+    "generated_text": "En esta semana, los period\u00f3logos de la BBC seq\u00fcestraron este art\u00edculo con ayuda de BBC Mundo:",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.6184112954025085,
+    "generated_text": "En esta nueva serie, los periodistas de la BBC te ayudan del programa interactivo con la tem\u00e1tica:",
+    "true_label": true
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.3333331346511841,
+    "generated_text": "A man has been injured in an attack outside a nightclub.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.1374003291130066,
+    "generated_text": "A third police officer and two soldiers were injured on Saturday during a shooting between troops and the Farc rebels in the south-western Cauca province.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.222054123878479,
+    "generated_text": "Southeastern passengers have been left stranded after delays caused by a third rail network, says the transport committee of Transport for England.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.1245584487915039,
+    "generated_text": "A weekly bulletin on the Office for National Statistics (ONS) looks back at the country's new tax hike.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.12868642547856207,
+    "generated_text": "M\u00e1s de 6.000 people are being treated at London's Nightingale hospital because of restrictions on the facilities - it is understood.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.0650527286529541,
+    "generated_text": "As videos about health have spread online with millions of views from teenagers or disabled people, BBC News looks at some celebrities and doctors' practices.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.23076924910912147,
+    "generated_text": "A consultation into changes to clean air services with three councils published on 2 November has been started.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.013996586203575134,
+    "generated_text": "Decenas of people have been killed during violent protests in East Papua, officials say.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.10269124209880828,
+    "generated_text": "A US-based study of European Council nationals has said of higher number of people applying for UK citizenship in the last year.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.3105646860905183,
+    "generated_text": "Last year two children were told, \"I was a teenager for hundreds of years.\" But it continued to give us the strong support it is looking in the way they avoid the divorce debate.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.18161481347951022,
+    "generated_text": "En esta nueva serie, los periodistas de la BBC te ayudan a practicar ingl\u00e9s con los titulares de las noticias de este domingo.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.06766133196651936,
+    "generated_text": "A few week ago, the Office for Budget Responsibility (O BR) apologised for failings over how government expects to spend in 2021 and 2017, but what happened after the recent spending change?",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.999985858798027,
+    "generated_text": "Este 14 April the Royal Family visited the home of Charles Dickens.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.3680402573786284,
+    "generated_text": "Debenhams catering staff is to announce that they are facing redundancy when the firm will close some cafes, the BBC was told.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.5318737213428204,
+    "generated_text": "A petition which has claimed asylum by the Home Office has been handed a 100,000-signature note.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.28570695008550373,
+    "generated_text": "Seg\u00fan la latest submission, you can conocer la full investigaci\u00f3n de la public spending review.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.0011760853230953217,
+    "generated_text": "Isle of Man residents face a major queue of air buses in June after concerns about vehicles being failures.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.05645766562741736,
+    "generated_text": "A 20-year-old woman thought a terrorist group has been turned in to Cambodia says she is missing for the first time around the world.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.0003554821014404297,
+    "generated_text": "Al-Jazeera's journalists visited a Pakistani school on Wednesday with the permission to carry out their first meetings.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.09247559850866144,
+    "generated_text": "Uncomfortable negotiations around Brexit are up to the final step, First Minister Carwyn Jones has insisted.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.22489655680126613,
+    "generated_text": "Unprecedented protests have been staged in northern Espirito Santo against the military police's strike during a deadly weekend of protest.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.18608757257461547,
+    "generated_text": "As part of the political row the far-right group of rebels campaigns to secure a post-UK Brexit deal has been deeply trying to bring in their own weapons, it seems too clear why.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.3311791718006134,
+    "generated_text": "There has been an upsurge in violence involving police staff in the past two years.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.23085127688116497,
+    "generated_text": "El presidente de France Francois Hollande says Francia is expected to start air strikes offensives to fight Islamic State in Syria.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.1453295332138185,
+    "generated_text": "En esta nueva serie, los periodistas de la BBC verieron el video y aprende nuevo vocabulario sobre temas de sexualabuse being submitted to Kids Company.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.2372980997675941,
+    "generated_text": "Yulia Sandioha spending her full attic in a block of pots in the mountains, in one direction they cram up the doors of her kitchen.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.5997715711593627,
+    "generated_text": "El video de a koala - stolen from their waist-length of lawn without being com\u00fan ?",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.03231177665293217,
+    "generated_text": "A woman is in a critical condition after la head was injured in the grounds of another public toilet in Devon.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.40234677230610566,
+    "generated_text": "A debate has been held amid calls to \"strengthen\" dog thefts in England so anyone can take their pet.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.3325938681761424,
+    "generated_text": "Esta semana, la selecci\u00f3n de los mejores periodistas de la semana.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.2220521724742392,
+    "generated_text": "A motorcade at a rival Pakistani resort to try to help drone attacks with bombs has been launched by militants, BBC News reports.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.1453869640827179,
+    "generated_text": "A soldier shot dead during World War One has been buried in France.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.21562105730960243,
+    "generated_text": "En el Libro de la Naci\u00f3n, el titular de Naciones Unidas, abre a nueva serie de llamadas para curiosos. El siguiente fue el video de navegaci\u00f3n directed desde este domingo.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.14285715137209212,
+    "generated_text": "Saturn has an oxygen exosphere on the Moon of Rhea, say scientists.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.19987776279449462,
+    "generated_text": "Este mi\u00e9rcoles, el period broadcast from the Channel 4 programme of noticias de la semana:",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.4999999701976776,
+    "generated_text": "Compartir tus videos con los amigos en la red esta nueva serie:",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.1441429512841361,
+    "generated_text": "Dorothy Perkins bakery, Boohoo, has reported falling sales and strong growth in sales.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.10913983867927031,
+    "generated_text": "Un hecho critical is being investigated by the police watchdog on the family of a Leicestershire woman who died in their third-floor flat.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.1628627129963466,
+    "generated_text": "Hace un a\u00f1o a tree has been nominated for the World Heritage Award (WPY). Here is why the competition was taking an end in Britain early in the midst of the modern world.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.4244477323123387,
+    "generated_text": "El video de la mansi\u00f3n de las noticias de este martes en espa\u00f1ol.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.33333245913187665,
+    "generated_text": "They are commemorating a woman who was fatally stabbed in the back in Cornwall.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.09081778201189908,
+    "generated_text": "More than 20 people were killed in a shooting at another gathering in Canada, police say.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.47081359436637477,
+    "generated_text": "Former Radio 1 DJ and columnist Nick Travis has defended his sexuality while investigating criminal acts as \"cureful and sex-explicit\".",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.4351704219977061,
+    "generated_text": "It was just two weeks before India was put on the UK's Covid border travel- ban for travel, the government has said.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.07535504549741745,
+    "generated_text": "La BBC's National Media Council has confirmed that two British men who were tortured for smuggling cannabis may avoid being sentenced to death.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": NaN,
+    "generated_text": "Su nombre, address, contact, phone ya...",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.17647063381531658,
+    "generated_text": "Sandra Bullock and George Clooney have won the Golden Lion in this year's Venice Film Awards, it'es announced.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": 0.05451240412452642,
+    "generated_text": "A social media group set up for the Black Country News has used the word \"faggots\" outside Facebook's account.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "False",
+    "score": -0.0732385754585266,
+    "generated_text": "El BBC News profiles the local readers en los \u00faltimos d\u00edas con los titulares de los testes.",
+    "true_label": false
+  },
+  {
+    "is_watermarked": "True",
+    "score": 0.7499988451600075,
+    "generated_text": "En esta nueva serie,\u4f60 can leer el siguiente art\u00edculo sobre universities in the UK:",
+    "true_label": false
+  }
+]

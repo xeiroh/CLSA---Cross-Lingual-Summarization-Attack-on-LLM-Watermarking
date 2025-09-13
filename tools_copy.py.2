@@ -232,9 +232,14 @@ def split_dataset(dataset, sample_size=100):
 	non_watermark_samples = dataset.select(list(non_watermark_idx))
 	return watermark_samples, non_watermark_samples
 
+def split_and_generate(model_components, dataset, language="amharic", sample_size=100, max_chars=2000):
+	"""Split dataset into two halves and generate watermarked and unwatermarked outputs sequentially."""
+	watermark_samples, non_watermark_samples = split_dataset(dataset, sample_size=sample_size)
+	det_wm = generate(model_components, watermark_samples, watermark=True, max_chars=max_chars, language=language)
+	det_uwm = generate(model_components, non_watermark_samples, watermark=False, max_chars=max_chars, language=language)
+	return det_wm + det_uwm
 
-
-def generate(model_components, dataset, watermark: bool, language='english', max_chars=2000, max_tokens=256):
+def generate(model_components, dataset, watermark: bool, language='english', max_chars=2000):
 	"""Generate outputs sequentially (no batching) to minimize VRAM use.
 
 	- Runs single-sample generation on GPU in float16 when available.
@@ -257,11 +262,15 @@ def generate(model_components, dataset, watermark: bool, language='english', max
 		except Exception:
 			pass
 
+	try:
+		max_new = int(getattr(cfg, "gen_kwargs", {}).get("max_new_tokens", 128))
+	except Exception:
+		max_new = 128
 
 	# Sequential generation to keep VRAM low
 	for i in tqdm(range(n), desc="Sequential generation"):
 		text = prompts[i]
-		enc = tokenizer(text, return_tensors="pt")
+		enc = tokenizer(text, return_tensors="pt", padding=False, truncation=True)
 		enc = {k: v.to(device) for k, v in enc.items()}
 
 		use_lp = LogitsProcessorList([logits_proc]) if (watermark and logits_proc) else None
@@ -269,7 +278,7 @@ def generate(model_components, dataset, watermark: bool, language='english', max
 		with torch.no_grad():
 			out = gen_model.generate(
 				**enc,
-				max_new_tokens=max_tokens,
+				max_new_tokens=max_new,
 				do_sample=True,
 				logits_processor=use_lp,
 				use_cache=False,
@@ -285,20 +294,15 @@ def generate(model_components, dataset, watermark: bool, language='english', max
 		results[i] = det
 
 		# Free up memory between iterations
-		# if device == "cuda":
-		# 	try:
-		# 		torch.cuda.empty_cache()
-		# 	except Exception:
-		# 		pass
+		if device == "cuda":
+			try:
+				torch.cuda.empty_cache()
+			except Exception:
+				pass
 
 	return [r for r in results if r is not None]
 	
-def split_and_generate(model_components, dataset, language="amharic", sample_size=100, max_chars=2000, max_tokens=256):
-	"""Split dataset into two halves and generate watermarked and unwatermarked outputs sequentially."""
-	watermark_samples, non_watermark_samples = split_dataset(dataset, sample_size=sample_size)
-	det_wm = generate(model_components, watermark_samples, watermark=True, max_chars=max_chars, language=language, max_tokens=max_tokens)
-	det_uwm = generate(model_components, non_watermark_samples, watermark=False, max_chars=max_chars, language=language, max_tokens=max_tokens)
-	return det_wm + det_uwm
+	
 	
 
 def detect(samples, model, column='generated_text', workers=4):

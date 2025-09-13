@@ -20,10 +20,24 @@ def evaluate_detection(detections):
 	"""
 
 	# Ground truth and scores
-	y_true = [1 if bool(item.get('true_label', False)) else 0 for item in detections]
-	y_scores = [float(item.get('score', 0.0)) for item in detections]
+	y_true = np.array([1 if bool(item.get('true_label', False)) else 0 for item in detections], dtype=int)
+	# Some detectors may emit NaN/inf scores; coerce to float and filter
+	raw_scores = [item.get('score', 0.0) for item in detections]
+	# Convert non-castable values to nan, then filter
+	def to_float(x):
+		try:
+			return float(x)
+		except Exception:
+			return float('nan')
+	y_scores = np.array([to_float(x) for x in raw_scores], dtype=float)
+	finite_mask = np.isfinite(y_scores)
+	if not np.all(finite_mask):
+		# Drop NaN/inf entries consistently from truth and scores
+		y_scores = y_scores[finite_mask]
+		y_true = y_true[finite_mask]
 
-	has_both_classes = len(set(y_true)) > 1
+	# Need at least one sample and both classes for ranking metrics
+	has_both_classes = (len(y_true) > 0) and (len(set(y_true.tolist())) > 1)
 
 	# Ranking metrics (defined only if both classes are present)
 	roc_auc = roc_auc_score(y_true, y_scores) if has_both_classes else float('nan')

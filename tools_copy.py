@@ -1,7 +1,5 @@
 # minimal example sketch (adapt paths/models to your GPU/CPU)
-import os, glob
-import tokenize
-from xml.parsers.expat import model
+import os
 from datasets.arrow_dataset import Dataset
 from datasets.dataset_dict import DatasetDict, IterableDatasetDict
 from datasets.iterable_dataset import IterableDataset
@@ -20,8 +18,6 @@ import numpy as np
 from functools import lru_cache
 from pipeline import translate
 
-SIR_MAPPING_DIR = os.path.join("workspace", "CLSA---Cross-Lingual-Summarization-Attack-on-LLM-Watermarking", ".venv", "lib", "python3.12", "site-packages", "markllm", "watermark", "sir", "mapping")  # Adjust as needed
-
 warnings.filterwarnings("ignore")  # transformers logging
 # Avoid transformers using torch.inference_mode inside generate (causes XSIR/SIR issues)
 _os.environ.setdefault("TRANSFORMERS_NO_INFERENCE_MODE", "1")
@@ -35,59 +31,75 @@ print("Using device:", device, "- cuda available:", torch.cuda.is_available(), "
 RESULTS_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "results")
 
 def load_model(model_name: str | None = None, algorithm: str = "KGW", max_tokens: int = 256):
-	"""Load Mistral 7B and a MarkLLM watermark model.
+	"""Load Baichuan 7B and a MarkLLM watermark model, return all three.
 
 	Parameters:
-	- model_name: Optional HF id. Defaults to Mistral 7B.
+	- model_name: Optional HF id. Defaults to Baichuan 7B.
 	- algorithm: MarkLLM algorithm name (e.g., 'KGW', 'Unigram', 'SIR').
 	- max_tokens: forwarded to MarkLLM gen kwargs.
 
 	Returns: (tokenizer, gen_model, wm_model)
-	"""	
-	# 1) Load tokenizer/model (Mistral 7B Base by default)
-	model_name = model_name or "mistralai/Mistral-7B-v0.1"
+	"""
+	# 1) Load tokenizer/model (Baichuan2 7B Base by default)
+	model_name = model_name or "baichuan-inc/Baichuan2-7B-Base"
 	print(f"[models] Loading tokenizer: {model_name}")
-	tok = AutoTokenizer.from_pretrained(model_name, use_fast=False, trust_remote_code=True)
-	
-	
-	torch_dtype = torch.float16 if device == "cuda" else torch.float32
-	print(f"[models] Loading model: {model_name} (torch_dtype={torch_dtype}, device_map=auto)")
+	tok = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+	if getattr(tok, "pad_token", None) is None:
+		if getattr(tok, "eos_token", None) is not None:
+			tok.pad_token = tok.eos_token
+		else:
+			tok.add_special_tokens({"pad_token": "[PAD]"})
+	try:
+		tok.padding_side = "left"
+	except Exception:
+		pass
+
+	dtype = torch.float16 if device == "cuda" else torch.float32
+	print(f"[models] Loading model: {model_name} (dtype={dtype}, device_map=auto)")
 	try:
 		gen_model = AutoModelForCausalLM.from_pretrained(
 			model_name,
-			torch_dtype=torch_dtype,
-			device_map="auto"
+			trust_remote_code=True,
+			dtype=dtype,
+			device_map="auto",
+			low_cpu_mem_usage=True,
 		)
 	except TypeError:
-		# Fallback for older transformers versions
 		gen_model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True)
 		try:
 			gen_model.to(device)
 		except Exception:
 			pass
-	try:
-		if len(tok) != gen_model.get_input_embeddings().weight.shape[0]:
-			print(f"[warning] Vocab size mismatch: tokenizer {len(tok)} vs model {gen_model.get_input_embeddings().weight.shape[0]}. Resizing model embeddings.")
+
+	if getattr(gen_model.config, "pad_token_id", None) != getattr(tok, "pad_token_id", None):
+		try:
 			gen_model.resize_token_embeddings(len(tok))
-	except Exception:
-		pass
-	# Ensure PAD token id is set
-	try:
-		gen_model.config.pad_token_id = tok.pad_token_id
-	except Exception:
-		pass
-	# Disable cache to avoid issues with some watermark processors
+		except Exception:
+			pass
+		try:
+			gen_model.config.pad_token_id = tok.pad_token_id
+		except Exception:
+			pass
 	gen_model.config.use_cache = False
 	if hasattr(gen_model, "generation_config") and gen_model.generation_config is not None:
 		gen_model.generation_config.use_cache = False
-
+		
 	# 2) Build watermark model
 	print(f"[watermark] Building watermark model: {algorithm}")
-
-	
 	tf_cfg = TransformersConfig(model=gen_model, tokenizer=tok, device=device, max_new_tokens=max_tokens)
 	wm_model = AutoWatermark.load(algorithm_name=algorithm, transformers_config=tf_cfg)
+
 	# If SIR is requested but mapping length mismatches vocab, fall back to KGW
+	if str(algorithm).upper() == "SIR":
+		try:
+			out_emb = getattr(gen_model, "get_output_embeddings", lambda: None)()
+			vocab_sz = out_emb.weight.shape[0] if out_emb is not None else len(tok)
+			mapping_len = len(getattr(wm_model, "utils").mapping)
+			if mapping_len != vocab_sz:
+				print(f"[watermark] SIR mapping ({mapping_len}) != vocab ({vocab_sz}); falling back to KGW")
+				wm_model = AutoWatermark.load(algorithm_name="KGW", transformers_config=tf_cfg)
+		except Exception:
+			pass
 
 	return tok, gen_model, wm_model
 
@@ -232,73 +244,77 @@ def split_dataset(dataset, sample_size=100):
 	non_watermark_samples = dataset.select(list(non_watermark_idx))
 	return watermark_samples, non_watermark_samples
 
+def split_and_generate(model_components, dataset, language="amharic", sample_size=100, max_chars=2000):
+    """Split dataset into two halves and generate watermarked and unwatermarked outputs sequentially."""
+    watermark_samples, non_watermark_samples = split_dataset(dataset, sample_size=sample_size)
+    det_wm = generate(model_components, watermark_samples, watermark=True, max_chars=max_chars, language=language)
+    det_uwm = generate(model_components, non_watermark_samples, watermark=False, max_chars=max_chars, language=language)
+    return det_wm + det_uwm
 
+def generate(model_components, dataset, watermark: bool, language='english', max_chars=2000):
+    """Generate outputs sequentially (no batching) to minimize VRAM use.
 
-def generate(model_components, dataset, watermark: bool, language='english', max_chars=2000, max_tokens=256):
-	"""Generate outputs sequentially (no batching) to minimize VRAM use.
+    - Runs single-sample generation on GPU in float16 when available.
+    - Forces num_beams=1 and use_cache=False.
+    - Applies watermark via logits_processor when `watermark=True`.
+    """
+    prompts = [_make_prompt(item["text"], max_chars, language) for item in dataset]
+    n = len(prompts)
+    results: list[dict | None] = [None] * n
 
-	- Runs single-sample generation on GPU in float16 when available.
-	- Forces num_beams=1 and use_cache=False.
-	- Applies watermark via logits_processor when `watermark=True`.
-	"""
-	prompts = [_make_prompt(item["text"], max_chars, language) for item in dataset]
-	n = len(prompts)
-	results: list[dict | None] = [None] * n
+    tokenizer, gen_model, wm = model_components
+    cfg = getattr(wm, "config", object())
+    logits_proc = getattr(wm, "logits_processor", None)
 
-	tokenizer, gen_model, wm = model_components
-	cfg = getattr(wm, "config", object())
-	logits_proc = getattr(wm, "logits_processor", None)
+    # Prepare model
+    if gen_model is not None:
+        gen_model.eval()
+        try:
+            gen_model.to(device)
+        except Exception:
+            pass
 
-	# Prepare model
-	if gen_model is not None:
-		gen_model.eval()
-		try:
-			gen_model.to(device)
-		except Exception:
-			pass
+    try:
+        max_new = int(getattr(cfg, "gen_kwargs", {}).get("max_new_tokens", 128))
+    except Exception:
+        max_new = 128
 
+    # Sequential generation to keep VRAM low
+    for i in tqdm(range(n), desc="Sequential generation"):
+        text = prompts[i]
+        enc = tokenizer(text, return_tensors="pt", padding=False, truncation=True)
+        enc = {k: v.to(device) for k, v in enc.items()}
 
-	# Sequential generation to keep VRAM low
-	for i in tqdm(range(n), desc="Sequential generation"):
-		text = prompts[i]
-		enc = tokenizer(text, return_tensors="pt")
-		enc = {k: v.to(device) for k, v in enc.items()}
+        use_lp = LogitsProcessorList([logits_proc]) if (watermark and logits_proc) else None
 
-		use_lp = LogitsProcessorList([logits_proc]) if (watermark and logits_proc) else None
+        with torch.no_grad():
+            out = gen_model.generate(
+                **enc,
+                max_new_tokens=max_new,
+                do_sample=True,
+                logits_processor=use_lp,
+                use_cache=False,
+                num_beams=1,
+            )
 
-		with torch.no_grad():
-			out = gen_model.generate(
-				**enc,
-				max_new_tokens=max_tokens,
-				do_sample=True,
-				logits_processor=use_lp,
-				use_cache=False,
-				num_beams=1,
-			)
+        dec = tokenizer.batch_decode(out, skip_special_tokens=True)
+        gen_text = dec[0] if dec else ""
 
-		dec = tokenizer.batch_decode(out)
-		gen_text = dec[0] if dec else ""
+        det = wm.detect_watermark(gen_text)
+        det["generated_text"] = gen_text
+        det["true_label"] = watermark
+        results[i] = det
 
-		det = wm.detect_watermark(gen_text)
-		det["generated_text"] = gen_text
-		det["true_label"] = watermark
-		results[i] = det
+        # Free up memory between iterations
+        if device == "cuda":
+            try:
+                torch.cuda.empty_cache()
+            except Exception:
+                pass
 
-		# Free up memory between iterations
-		# if device == "cuda":
-		# 	try:
-		# 		torch.cuda.empty_cache()
-		# 	except Exception:
-		# 		pass
-
-	return [r for r in results if r is not None]
+    return [r for r in results if r is not None]
 	
-def split_and_generate(model_components, dataset, language="amharic", sample_size=100, max_chars=2000, max_tokens=256):
-	"""Split dataset into two halves and generate watermarked and unwatermarked outputs sequentially."""
-	watermark_samples, non_watermark_samples = split_dataset(dataset, sample_size=sample_size)
-	det_wm = generate(model_components, watermark_samples, watermark=True, max_chars=max_chars, language=language, max_tokens=max_tokens)
-	det_uwm = generate(model_components, non_watermark_samples, watermark=False, max_chars=max_chars, language=language, max_tokens=max_tokens)
-	return det_wm + det_uwm
+	
 	
 
 def detect(samples, model, column='generated_text', workers=4):
