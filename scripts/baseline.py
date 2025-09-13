@@ -19,7 +19,7 @@ try:
 except Exception:
     pass
 
-def baseline(language="english",  algorithm="KGW", samples=100, max_tokens=256):
+def baseline(language="english", algorithm="KGW", samples=100, max_tokens=256):
 	model = load_model(max_tokens=max_tokens, algorithm=algorithm)
 	dataset = load_data(language)
 
@@ -27,19 +27,19 @@ def baseline(language="english",  algorithm="KGW", samples=100, max_tokens=256):
 
 	# Interleave to form a mixed list (order not important for metrics)
 	# Sequential generation for lower VRAM usage
-	detections = split_and_generate(model, dataset, sample_size=samples, language=language, max_tokens=max_tokens)
+	detections = split_and_generate(model, dataset, sample_size=samples, max_tokens=max_tokens)
 
 	metrics = evaluate_detection(detections)
 	return detections, metrics
 
 if __name__ == "__main__":
 	# Use "Unbiased" as the label; tools maps it to the correct implementation
-	algorithms = ["XSIR", "SIR", "KGW", "Unigram"] # XSIR add later
+	algorithms = ["KGW", "XSIR", "Unigram", "SIR"] # XSIR add later
 
 	lang = "english"
 	for algo in algorithms:
 		try:
-			detections, metrics = baseline(language=lang, algorithm=algo, samples=2, max_tokens=256)
+			detections, metrics = baseline(language=lang, algorithm=algo, samples=2, max_tokens=512)
 			save_file(detections, f"baseline_detections_{algo}.json")
 			save_file(metrics, f"baseline_metrics_{algo}.json")
 			print("EVALUATION METRICS:", metrics)

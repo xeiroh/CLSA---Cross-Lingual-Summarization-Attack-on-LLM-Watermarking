@@ -47,7 +47,7 @@ def load_model(model_name: str | None = None, algorithm: str = "KGW", max_tokens
 	# 1) Load tokenizer/model (Mistral 7B Base by default)
 	model_name = model_name or "mistralai/Mistral-7B-v0.1"
 	print(f"[models] Loading tokenizer: {model_name}")
-	tok = AutoTokenizer.from_pretrained(model_name, use_fast=False, trust_remote_code=True)
+	tok = AutoTokenizer.from_pretrained(model_name, use_fast=True, trust_remote_code=True)
 	
 	
 	torch_dtype = torch.float16 if device == "cuda" else torch.float32
@@ -55,7 +55,8 @@ def load_model(model_name: str | None = None, algorithm: str = "KGW", max_tokens
 	try:
 		gen_model = AutoModelForCausalLM.from_pretrained(
 			model_name,
-			torch_dtype=torch_dtype,
+			torch_dtype=torch_dtype, # auto
+			trust_remote_code=True,
 			device_map="auto"
 		)
 	except TypeError:
@@ -77,15 +78,15 @@ def load_model(model_name: str | None = None, algorithm: str = "KGW", max_tokens
 	except Exception:
 		pass
 	# Disable cache to avoid issues with some watermark processors
-	gen_model.config.use_cache = False
-	if hasattr(gen_model, "generation_config") and gen_model.generation_config is not None:
-		gen_model.generation_config.use_cache = False
+	# gen_model.config.use_cache = False
+	# if hasattr(gen_model, "generation_config") and gen_model.generation_config is not None:
+	# 	gen_model.generation_config.use_cache = False
 
 	# 2) Build watermark model
 	print(f"[watermark] Building watermark model: {algorithm}")
 
-	
-	tf_cfg = TransformersConfig(model=gen_model, tokenizer=tok, device=device, max_new_tokens=max_tokens)
+
+	tf_cfg = TransformersConfig(model=gen_model, tokenizer=tok, max_new_tokens=max_tokens)
 	wm_model = AutoWatermark.load(algorithm_name=algorithm, transformers_config=tf_cfg)
 	# If SIR is requested but mapping length mismatches vocab, fall back to KGW
 
@@ -205,23 +206,24 @@ def load_file(filename: str, as_json: bool | None = None):
 	else:
 		return path.read_text()
 
-def _make_prompt(text, max_chars=2000, language="english"):
-	"""Build a summarization prompt without heavy translation model loads.
+# def _make_prompt(text, max_chars=2000, language="english"):
+# 	"""Build a summarization prompt without heavy translation model loads.
 
-	Using a lightweight, hardcoded instruction per language avoids loading
-	large translation models (e.g., M2M100-1.2B) just to translate a fixed
-	phrase, which can cause long startup delays or OOM.
-	"""
-	lang = (language or "english").lower()
-	instruction_map = {
-		"english": "Summarize the following text:",
-		"swahili": "Fupisha maandishi yafuatayo:",
-		"spanish": "Resume el siguiente texto:",
-		"amharic": "የሚከተለውን ጽሑፍ አጭር አድርግ:",
-		# Fallback for other languages: English instruction
-	}
-	instr = instruction_map.get(lang, instruction_map["english"])
-	return instr + "\n\n" + text[:max_chars]
+# 	Using a lightweight, hardcoded instruction per language avoids loading
+# 	large translation models (e.g., M2M100-1.2B) just to translate a fixed
+# 	phrase, which can cause long startup delays or OOM.
+# 	"""
+# 	lang = (language or "english").lower()
+# 	# instruction_map = {
+# 	# 	"english": "Summarize the following text:",
+# 	# 	"swahili": "Fupisha maandishi yafuatayo:",
+# 	# 	"spanish": "Resume el siguiente texto:",
+# 	# 	"amharic": "የሚከተለውን ጽሑፍ አጭር አድርግ:",
+# 	# 	# Fallback for other languages: English instruction
+# 	# }
+# 	# instr = instruction_map.get(lang, instruction_map["english"])
+# 	instr = "Summarize the following text:"
+# 	return instr + "\n\n" + text[:max_chars]
 
 def split_dataset(dataset, sample_size=100):
 	sample_size = min(sample_size, len(dataset))
@@ -234,70 +236,73 @@ def split_dataset(dataset, sample_size=100):
 
 
 
-def generate(model_components, dataset, watermark: bool, language='english', max_chars=2000, max_tokens=256):
-	"""Generate outputs sequentially (no batching) to minimize VRAM use.
-
-	- Runs single-sample generation on GPU in float16 when available.
-	- Forces num_beams=1 and use_cache=False.
-	- Applies watermark via logits_processor when `watermark=True`.
+def generate(model_components, dataset, watermark: bool, max_chars=1500, max_tokens=256):
 	"""
-	prompts = [_make_prompt(item["text"], max_chars, language) for item in dataset]
-	n = len(prompts)
-	results: list[dict | None] = [None] * n
-
+	Generate only the continuation (new tokens) so watermark detection runs on model output,
+	not the input prompt/article.
+	"""
 	tokenizer, gen_model, wm = model_components
-	cfg = getattr(wm, "config", object())
-	logits_proc = getattr(wm, "logits_processor", None)
+	gen_model.eval()
 
-	# Prepare model
-	if gen_model is not None:
-		gen_model.eval()
-		try:
-			gen_model.to(device)
-		except Exception:
-			pass
+	results = []
+	# Add a tqdm progress bar; show total if available
+	try:
+		total = len(dataset)
+	except Exception:
+		total = None
+	desc = f"Generating ({'wm' if watermark else 'no-wm'})"
+	for ex in tqdm(dataset, total=total, desc=desc, unit="ex"):
+		src = ex.get("text", None)
+		if src is None:
+			continue
+		if max_chars:
+			src = src[:max_chars]
 
+		# Build a lean instruction (avoid adding <s> manually)
+		prompt = f"Read the following article and summarize the key points in 5 to 10 sentences. Each sentence should capture an important part of the text.\n\nArticle:\n{src}\n\nSummary:"
+		enc = tokenizer(prompt, return_tensors="pt")
+		emb_device = gen_model.get_input_embeddings().weight.device
+		enc = {k: v.to(emb_device) for k, v in enc.items()}
+		# enc = {k: v.to(device) for k, v in enc.items()}
 
-	# Sequential generation to keep VRAM low
-	for i in tqdm(range(n), desc="Sequential generation"):
-		text = prompts[i]
-		enc = tokenizer(text, return_tensors="pt")
-		enc = {k: v.to(device) for k, v in enc.items()}
+		prompt_len = enc["input_ids"].shape[1]
 
-		use_lp = LogitsProcessorList([logits_proc]) if (watermark and logits_proc) else None
+		logits_proc = None
+		if watermark and hasattr(wm, "logits_processor") and wm.logits_processor is not None:
+			from transformers import LogitsProcessorList
+			logits_proc = LogitsProcessorList([wm.logits_processor])
 
 		with torch.no_grad():
 			out = gen_model.generate(
 				**enc,
 				max_new_tokens=max_tokens,
+				min_new_tokens=128,
 				do_sample=True,
-				logits_processor=use_lp,
-				use_cache=False,
+				temperature=0.8,
+				top_p=0.95,
+				logits_processor=logits_proc,
+				use_cache=True, # was False
 				num_beams=1,
 			)
 
-		dec = tokenizer.batch_decode(out)
-		gen_text = dec[0] if dec else ""
+		# Slice off the prompt tokens
+		gen_ids = out[0][prompt_len:]
+		generated_text = tokenizer.decode(gen_ids, skip_special_tokens=True).strip()
 
-		det = wm.detect_watermark(gen_text)
-		det["generated_text"] = gen_text
+		# Watermark detection should see ONLY the generated text
+		det = wm.detect_watermark(generated_text)
+		det["generated_text"] = generated_text
+		det["prompt"] = prompt            # keep for reference (optional)
 		det["true_label"] = watermark
-		results[i] = det
+		results.append(det)
 
-		# Free up memory between iterations
-		# if device == "cuda":
-		# 	try:
-		# 		torch.cuda.empty_cache()
-		# 	except Exception:
-		# 		pass
-
-	return [r for r in results if r is not None]
+	return results
 	
-def split_and_generate(model_components, dataset, language="amharic", sample_size=100, max_chars=2000, max_tokens=256):
+def split_and_generate(model_components, dataset, sample_size=100, max_chars=2000, max_tokens=256):
 	"""Split dataset into two halves and generate watermarked and unwatermarked outputs sequentially."""
 	watermark_samples, non_watermark_samples = split_dataset(dataset, sample_size=sample_size)
-	det_wm = generate(model_components, watermark_samples, watermark=True, max_chars=max_chars, language=language, max_tokens=max_tokens)
-	det_uwm = generate(model_components, non_watermark_samples, watermark=False, max_chars=max_chars, language=language, max_tokens=max_tokens)
+	det_wm = generate(model_components, watermark_samples, watermark=True, max_chars=max_chars, max_tokens=max_tokens)
+	det_uwm = generate(model_components, non_watermark_samples, watermark=False, max_chars=max_chars, max_tokens=max_tokens)
 	return det_wm + det_uwm
 	
 
@@ -313,3 +318,4 @@ def detect(samples, model, column='generated_text', workers=4):
 		for future in tqdm(as_completed(futures), total=len(futures)):
 			future.result()
 	return detections
+

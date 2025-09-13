@@ -2,30 +2,43 @@
 import os
 import json
 from collections import defaultdict
+from typing import Optional, Tuple
 
 RESULTS_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "results")
 OUTPUT_PATH = os.path.join(RESULTS_DIR, "baseline_all.json")
 
-def parse_fname(fname: str):
+def parse_fname(fname: str) -> Optional[Tuple[str, str]]:
     """
-    Expect: baseline_{detections|metrics}_{ALGO}_{LANG}.json
-    Returns: (kind, algo, lang) or None if not matching.
+    Expected patterns (no language suffix):
+      baseline_metrics_{ALGO}.json
+      baseline_detections_{ALGO}.json
+
+    Returns:
+      (kind, algo) or None if not matching.
+
+    Notes:
+      - {ALGO} may contain underscores; we parse from the left and take everything
+        after the second token as the algo.
     """
-    if not fname.endswith(".json"):
+    if not fname.endswith(".json") or not fname.startswith("baseline_"):
         return None
-    parts = fname[:-5].split("_")  # drop .json
-    if len(parts) < 4:
+    if fname == "baseline_all.json":
         return None
-    if parts[0] != "baseline":
+
+    stem = fname[:-5]  # drop ".json"
+    parts = stem.split("_")
+    # minimal: baseline + (metrics|detections) + algo
+    if len(parts) < 3 or parts[0] != "baseline":
         return None
-    kind = parts[1]  # "detections" or "metrics"
-    # allow algo with internal dashes/words merged by underscores beyond the 3rd token
-    # but per your convention it's exactly 4 tokens; keep strict to avoid surprises
-    algo = parts[2]
-    lang = parts[3]
-    if kind not in ("detections", "metrics"):
+
+    kind = parts[1]
+    if kind not in ("metrics", "detections"):
         return None
-    return kind, algo, lang
+
+    algo = "_".join(parts[2:])  # supports underscores in algo
+    if not algo:
+        return None
+    return kind, algo
 
 def load_json(path: str):
     with open(path, "r") as f:
@@ -33,22 +46,23 @@ def load_json(path: str):
 
 def main():
     os.makedirs(RESULTS_DIR, exist_ok=True)
-    files = [f for f in os.listdir(RESULTS_DIR) if f.startswith("baseline_") and f.endswith(".json")]
+    files = [f for f in os.listdir(RESULTS_DIR)
+             if f.startswith("baseline_") and f.endswith(".json") and f != "baseline_all.json"]
 
-    bucket = defaultdict(lambda: {"algorithm": None, "language": None, "metrics": None, "detections": None})
+    # Collate by algorithm
+    bucket = defaultdict(lambda: {
+        "algorithm": None,
+        "metrics": None,     # dict
+        "detections": []     # list of dicts
+    })
 
-    for fname in files:
+    for fname in sorted(files):
         parsed = parse_fname(fname)
         if not parsed:
             continue
-        kind, algo, lang = parsed
-        key = (algo, lang)
-        path = os.path.join(RESULTS_DIR, fname)
 
-        if bucket[key]["algorithm"] is None:
-            bucket[key]["algorithm"] = algo
-        if bucket[key]["language"] is None:
-            bucket[key]["language"] = lang
+        kind, algo = parsed
+        path = os.path.join(RESULTS_DIR, fname)
 
         try:
             data = load_json(path)
@@ -56,24 +70,39 @@ def main():
             print(f"Skip {fname}: {e}")
             continue
 
-        if kind == "metrics":
-            # metrics should be a dict like {"accuracy": ..., "precision": ...}
-            bucket[key]["metrics"] = data
-        else:
-            # detections should be a list of dicts
-            bucket[key]["detections"] = data
+        entry = bucket[algo]
+        if entry["algorithm"] is None:
+            entry["algorithm"] = algo
 
+        if kind == "metrics":
+            if isinstance(data, dict):
+                entry["metrics"] = data
+            else:
+                print(f"Skip {fname}: metrics file is not a dict")
+        else:  # detections
+            if isinstance(data, list):
+                entry["detections"].extend(data)
+            else:
+                print(f"Skip {fname}: detections file is not a list")
+
+    # Emit only algorithms that have at least one of metrics or detections
     combined = []
-    for (algo, lang), entry in sorted(bucket.items(), key=lambda x: (x[0][0], x[0][1])):
-        # only include pairs where at least one of metrics or detections exists
-        if entry["metrics"] is None and entry["detections"] is None:
+    for algo, entry in sorted(bucket.items(), key=lambda x: x[0]):
+        if entry["metrics"] is None and not entry["detections"]:
             continue
-        combined.append(entry)
+        # ensure key order: algorithm -> metrics -> detections
+        combined.append({
+            "algorithm": entry["algorithm"],
+            "metrics": entry["metrics"],
+            "detections": entry["detections"],
+        })
 
     with open(OUTPUT_PATH, "w") as out:
         json.dump(combined, out, indent=2, ensure_ascii=False)
 
-    print(f"Wrote {OUTPUT_PATH} with {len(combined)} entries.")
+    print(f"Wrote {OUTPUT_PATH} with {len(combined)} algorithms.")
 
+if __name__ == "__main__":
+    main()
 if __name__ == "__main__":
     main()
