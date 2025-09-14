@@ -34,12 +34,12 @@ def baseline(language="english", algorithm="KGW", samples=100, max_tokens=256):
 
 if __name__ == "__main__":
 	# Use "Unbiased" as the label; tools maps it to the correct implementation
-	algorithms = ["KGW", "XSIR", "Unigram", "SIR"] # XSIR add later
+	algorithms = ["XSIR", "KGW", "Unigram", "SIR"] # XSIR add later
 
 	lang = "english"
 	for algo in algorithms:
 		try:
-			detections, metrics = baseline(language=lang, algorithm=algo, samples=2, max_tokens=512)
+			detections, metrics = baseline(language=lang, algorithm=algo, samples=500, max_tokens=512)
 			save_file(detections, f"baseline_detections_{algo}.json")
 			save_file(metrics, f"baseline_metrics_{algo}.json")
 			print("EVALUATION METRICS:", metrics)

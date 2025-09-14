@@ -17,6 +17,7 @@ from markllm.utils.transformers_config import TransformersConfig
 import warnings
 import os as _os
 import numpy as np
+import pandas as pd
 from functools import lru_cache
 from pipeline import translate
 
@@ -31,7 +32,6 @@ _os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 device = "cuda" if torch.cuda.is_available() else "cpu"
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.set_float32_matmul_precision("high")
-print("Using device:", device, "- cuda available:", torch.cuda.is_available(), "- cuda version:", torch.version.cuda)
 RESULTS_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "results")
 
 def load_model(model_name: str | None = None, algorithm: str = "KGW", max_tokens: int = 256):
@@ -45,6 +45,7 @@ def load_model(model_name: str | None = None, algorithm: str = "KGW", max_tokens
 	Returns: (tokenizer, gen_model, wm_model)
 	"""	
 	# 1) Load tokenizer/model (Mistral 7B Base by default)
+	print("Using device:", device, "- cuda available:", torch.cuda.is_available(), "- cuda version:", torch.version.cuda)
 	model_name = model_name or "mistralai/Mistral-7B-v0.1"
 	print(f"[models] Loading tokenizer: {model_name}")
 	tok = AutoTokenizer.from_pretrained(model_name, use_fast=True, trust_remote_code=True)
@@ -55,7 +56,7 @@ def load_model(model_name: str | None = None, algorithm: str = "KGW", max_tokens
 	try:
 		gen_model = AutoModelForCausalLM.from_pretrained(
 			model_name,
-			torch_dtype=torch_dtype, # auto
+			torch_dtype="auto", #torch_dtype,
 			trust_remote_code=True,
 			device_map="auto"
 		)
@@ -194,18 +195,9 @@ def load_file(filename: str, as_json: bool | None = None):
 		if candidate.exists():
 			path = candidate
 	if not path.exists():
-		# raise FileNotFoundError(f"No such file: {path}")
-		return None
+		raise FileNotFoundError(f"No such file: {path}")
 
-	ext = path.suffix.lower()
-	if as_json is True or (as_json is None and ext in {".json", ".jsonl", ".ndjson"}):
-		text = path.read_text()
-		if ext in {".jsonl", ".ndjson"}:
-			return [json.loads(line) for line in text.splitlines() if line.strip()]
-		return json.loads(text)
-	else:
-		return path.read_text()
-
+	return pd.read_json(path)
 # def _make_prompt(text, max_chars=2000, language="english"):
 # 	"""Build a summarization prompt without heavy translation model loads.
 
@@ -293,7 +285,7 @@ def generate(model_components, dataset, watermark: bool, max_chars=1500, max_tok
 		det = wm.detect_watermark(generated_text)
 		det["generated_text"] = generated_text
 		det["prompt"] = prompt            # keep for reference (optional)
-		det["true_label"] = watermark
+		det["true_label"] = 1 if watermark else 0
 		results.append(det)
 
 	return results
