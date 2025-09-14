@@ -16,7 +16,7 @@ def evaluate_detection(
 	*,
 	select_mode: str = "youden",   # "youden" or "target_fpr"
 	target_fpr: float = 0.01,
-	flip_if_needed: bool = True
+	flip_if_needed: bool = False
 ) -> dict:
 	"""
 	Evaluate watermark detection using pandas DataFrames only.
@@ -129,7 +129,8 @@ def evaluate_detection(
 	idx_t = int(np.argmin(np.abs(fpr_t - target_fpr)))
 	tpr_at_target = float(tpr_t[idx_t])
 
-	return {
+	if flip:
+		return {
 		"n_test": int(len(y_true_test)),
 		"n_pos_test": int(int(y_true_test.sum())),
 		"n_neg_test": int(len(y_true_test) - int(y_true_test.sum())),
@@ -149,7 +150,26 @@ def evaluate_detection(
 		"eer@test": eer_t,
 		f"tpr@fpr={target_fpr:.3f}@test": tpr_at_target,
 		"selection_details": sel_extra,
-	}
+		}
+	return {
+		"sample_sizes": {"n_test":int(len(y_true_test)),
+		"n_pos_test": int(int(y_true_test.sum())),
+		"n_neg_test": int(len(y_true_test) - int(y_true_test.sum())),
+		"n_val": int(len(y_true_val)) if val_df is not None else None,
+		"n_pos_val": int(int(y_true_val.sum())) if val_df is not None else None,
+		"n_neg_val": int(len(y_true_val) - int(y_true_val.sum())) if val_df is not None else None},
+		"threshold": float(thr),
+		"threshold_source": threshold_source,
+		"auroc@test": float(auroc),
+		"auprc@test": float(ap),
+		"accuracy@thr": acc,
+		"precision@thr": float(prec),
+		"recall@thr": float(rec),
+		"f1@thr": float(f1),
+		"eer@test": eer_t,
+		f"tpr@fpr={target_fpr:.3f}@test": tpr_at_target,
+		"selection_details": sel_extra,
+		}
 
 def clean_data(df: pd.DataFrame) -> pd.DataFrame:
 	# Keep only relevant columns

@@ -17,7 +17,10 @@ def print_results(name, find_by_algorithm=True, select_mode='youden', target_fpr
 
 if __name__ == "__main__":
 	filename = 'baseline_detections_KGW_english.json'
-	if len(sys.argv) > 1:
-		print_results(sys.argv[1], find_by_algorithm=False, select_mode='youden', target_fpr=0.01)
+	if len(sys.argv) > 2:
+		if sys.argv[1] == 'algo':
+			print_results(sys.argv[2])
+		else:
+			print_results(sys.argv[2], find_by_algorithm=False, select_mode='youden', target_fpr=0.01)
 	else:
 		print_results("XSIR", select_mode='target_fpr', target_fpr=0.01)

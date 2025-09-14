@@ -36,14 +36,14 @@ def baseline(language="english", algorithm="KGW", samples=100, max_tokens=256):
 
 if __name__ == "__main__":
 	# Use "Unbiased" as the label; tools maps it to the correct implementation
-	algorithms = ["XSIR", "KGW", "Unigram", "SIR"] # NOTE: change code to adapt to pandas for evaluate
+	algorithms = ["SIR"] # NOTE: change code to adapt to pandas for evaluate
 
 	lang = "english"
 	for algo in algorithms:
 		try:
 			detections, metrics = baseline(language=lang, algorithm=algo, samples=500, max_tokens=512)
-			save_file(detections, f"baseline_detections_{algo}.json")
-			save_file(metrics, f"baseline_metrics_{algo}.json")
+			save_file(detections, f"baseline_detections_{algo}_2.json")
+			save_file(metrics, f"baseline_metrics_{algo}_2.json")
 			print("EVALUATION METRICS:", metrics)
 		except FileNotFoundError as e:
 			print(f"Skipping {algo} for {lang}: {e}")

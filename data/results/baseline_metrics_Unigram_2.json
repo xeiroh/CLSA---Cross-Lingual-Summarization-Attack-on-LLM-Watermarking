@@ -1,0 +1,24 @@
+{
+  "n_test": 500,
+  "n_pos_test": 250,
+  "n_neg_test": 250,
+  "n_val": null,
+  "n_pos_val": null,
+  "n_neg_val": null,
+  "flip_score": false,
+  "threshold": 2.0059719452116163,
+  "threshold_source": "test (optimistic)",
+  "score_flipped": false,
+  "auroc@test": 0.9436079999999999,
+  "auprc@test": 0.9538741693029146,
+  "accuracy@thr": 0.878,
+  "precision@thr": 0.9565217391304348,
+  "recall@thr": 0.792,
+  "f1@thr": 0.8665207877461707,
+  "eer@test": 0.13,
+  "tpr@fpr=0.010@test": 0.552,
+  "selection_details": {
+    "eer_sel": 0.13,
+    "thr_eer_sel": 1.2649110640673518
+  }
+}
