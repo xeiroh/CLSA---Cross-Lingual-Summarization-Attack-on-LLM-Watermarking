@@ -16,7 +16,6 @@ def print_results(name, find_by_algorithm=True, select_mode='youden', target_fpr
 		print(f"{key}: {value}")
 
 if __name__ == "__main__":
-	filename = 'baseline_detections_KGW_english.json'
 	if len(sys.argv) > 2:
 		if sys.argv[1] == 'algo':
 			print_results(sys.argv[2])

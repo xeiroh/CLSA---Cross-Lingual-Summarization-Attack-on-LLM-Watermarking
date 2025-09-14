@@ -19,7 +19,6 @@ import os as _os
 import numpy as np
 import pandas as pd
 from functools import lru_cache
-from pipeline import translate
 
 SIR_MAPPING_DIR = os.path.join("workspace", "CLSA---Cross-Lingual-Summarization-Attack-on-LLM-Watermarking", ".venv", "lib", "python3.12", "site-packages", "markllm", "watermark", "sir", "mapping")  # Adjust as needed
 
@@ -298,16 +297,57 @@ def split_and_generate(model_components, dataset, sample_size=100, max_chars=200
 	return det_wm + det_uwm
 	
 
-def detect(samples, model, column='generated_text', workers=4):
-	detections = []
-	column = column
-	def work(p):
-		detect = model.detect_watermark(p)
-		detections.append(detect)
-	
-	with ThreadPoolExecutor(max_workers=workers) as executor:
-		futures = [executor.submit(work, p[column]) for p in tqdm(samples)]
-		for future in tqdm(as_completed(futures), total=len(futures)):
-			future.result()
-	return detections
+def detect(samples, model, column: str = 'generated_text', workers: int = 4):
+	"""Run watermark detection on provided samples.
 
+	Accepts:
+	- pandas DataFrame: reads text from `column`, returns a DataFrame of detections
+	- list[dict]: reads each dict[column]
+	- list[str]: treated as raw texts
+
+	Returns:
+	- DataFrame if input was a DataFrame; otherwise list[dict]
+	"""
+	import pandas as _pd
+
+	# Normalize inputs to a list of texts; remember if original was a DataFrame
+	is_df = isinstance(samples, _pd.DataFrame)
+	if is_df:
+		if column not in samples.columns:
+			raise ValueError(f"DataFrame missing required column: {column}")
+		texts = samples[column].astype(str).tolist()
+		orig_index = samples.index
+	else:
+		orig_index = None
+		if isinstance(samples, (list, tuple)):
+			if not samples:
+				return _pd.DataFrame() if is_df else []
+			first = samples[0]
+			if isinstance(first, dict):
+				texts = [str(s.get(column, "")) for s in samples]
+			elif isinstance(first, str):
+				texts = list(samples)
+			else:
+				texts = [str(s) for s in samples]
+		else:
+			raise TypeError("samples must be a pandas DataFrame, list[dict], or list[str]")
+
+	# Run detection, optionally in parallel
+	results: list[dict | None] = [None] * len(texts)
+
+	def work(i: int, t: str):
+		try:
+			res = model.detect_watermark(t)
+			results[i] = res
+		except Exception as e:
+			results[i] = {"error": str(e)}
+
+	with ThreadPoolExecutor(max_workers=workers) as executor:
+		futs = [executor.submit(work, i, t) for i, t in enumerate(texts)]
+		for _ in tqdm(as_completed(futs), total=len(futs)):
+			pass
+
+	if is_df:
+		out_df = _pd.DataFrame(results, index=orig_index)
+		return out_df
+	return [r for r in results if r is not None]
