@@ -1,138 +1,201 @@
 from __future__ import annotations
 
 import os
-from typing import Iterable
+import numpy as np
+from typing import Iterable, List
 
-import pandas as pd
 import torch
 from tqdm import tqdm
 
 from datasets import Dataset
-from transformers import LogitsProcessorList
+from transformers import AutoTokenizer, AutoModelForCausalLM, LogitsProcessorList
 
-from evaluation import DATA_PATH, evaluate_detection
-from tools import load_data, split_dataset
+from evaluation import DATA_PATH
+from tools import load_data, save_file, detect
 
-# Watermarking utils (same library used in tools.load_model)
+# Watermarking utils
 from markllm.watermark.auto_watermark import AutoWatermark
 from markllm.utils.transformers_config import TransformersConfig
 
-# Use the XLSum mT5 summarization model (already configured in pipeline.py)
-from pipeline import _get_xlsum_mt5_models
+
+def _get_device() -> torch.device:
+    return torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
 
-def _generate_xlsum(
-    model_components,
-    dataset: Iterable[dict] | Dataset,
-    watermark: bool,
-    *,
-    max_src_len: int = 1024,
-    max_new_tokens: int = 256,
-    min_new_tokens: int = 64,
-):
-    """Generate summaries with mT5 XLSum, optionally watermarked.
-
-    Returns a list of detection dicts with keys including:
-      - generated_text
-      - score, is_watermarked (from detector)
-      - true_label (1 if watermark else 0)
-    """
-    tok, model, wm = model_components
-    model.eval()
-
-    results = []
-
-    # Iterate sequentially to control VRAM usage
+def _load_llama_with_watermark(algorithm: str, *, max_new_tokens: int = 256):
+    """Load Llama 2 7B + MarkLLM watermark wrapper for the given algorithm."""
+    model_name = "meta-llama/Llama-2-7b-hf"
+    print(f"[cwra] Loading tokenizer: {model_name}")
+    tok = AutoTokenizer.from_pretrained(model_name, use_fast=True, trust_remote_code=True)
+    # Left padding is typically better for decoder-only models with KV cache
     try:
-        total = len(dataset)
+        tok.padding_side = "left"
     except Exception:
-        total = None
+        pass
+    if tok.pad_token is None:
+        tok.pad_token = tok.eos_token
 
-    for ex in tqdm(dataset, total=total, desc=f"XLSum gen ({'wm' if watermark else 'no-wm'})", unit="ex"):
-        src = ex.get("text", None)
-        if not isinstance(src, str) or not src.strip():
-            continue
-
-        enc = tok(
-            src,
-            return_tensors="pt",
-            truncation=True,
-            max_length=max_src_len,
+    print(f"[cwra] Loading model: {model_name}")
+    try:
+        model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            torch_dtype="auto",
+            trust_remote_code=True,
+            device_map="auto",
         )
-        enc = {k: v.to(model.device) for k, v in enc.items()}
+    except TypeError:
+        model = AutoModelForCausalLM.from_pretrained(model_name, trust_remote_code=True)
+        model = model.to(_get_device())
 
-        logits_proc = None
-        if watermark and hasattr(wm, "logits_processor") and wm.logits_processor is not None:
-            logits_proc = LogitsProcessorList([wm.logits_processor])
+    try:
+        if len(tok) != model.get_input_embeddings().weight.shape[0]:
+            model.resize_token_embeddings(len(tok))
+    except Exception:
+        pass
 
-        with torch.no_grad():
-            out = model.generate(
-                **enc,
-                max_new_tokens=max_new_tokens,
-                min_new_tokens=min_new_tokens,
-                num_beams=2,
-                do_sample=False,
-                length_penalty=1.0,
-                early_stopping=True,
-                logits_processor=logits_proc,
-                pad_token_id=getattr(tok, "pad_token_id", None),
-                eos_token_id=getattr(tok, "eos_token_id", None),
-            )
-
-        generated_text = tok.decode(out[0], skip_special_tokens=True).strip()
-
-        det = wm.detect_watermark(generated_text)
-        det["generated_text"] = generated_text
-        det["true_label"] = 1 if watermark else 0
-        results.append(det)
-
-    return results
-
-
-def _load_xlsum_with_watermark(algorithm: str, *, max_new_tokens: int = 256):
-    """Load XLSum mT5 + a MarkLLM watermark model for the given algorithm."""
-    tok, model = _get_xlsum_mt5_models()
-
-    # Build watermark wrapper for seq2seq generation
     tf_cfg = TransformersConfig(model=model, tokenizer=tok, max_new_tokens=max_new_tokens)
     wm = AutoWatermark.load(algorithm_name=algorithm, transformers_config=tf_cfg)
     return tok, model, wm
 
 
-def cwra_chinese(algorithm: str, samples: int = 200, max_new_tokens: int = 256):
-    """Run CWRA baseline using XLSum (Chinese) with half WM and half no-WM.
+def _select_samples(dataset: Dataset, n: int, seed: int = 42) -> List[dict]:
+    n = min(n, len(dataset))
+    rng = np.random.default_rng(seed)
+    idx = rng.choice(len(dataset), size=n, replace=False)
+    return [dataset[int(i)] for i in idx]
 
-    Returns detections DataFrame and metrics dict.
+
+def _paraphrase_chinese(
+    model_components,
+    dataset: Iterable[dict] | Dataset,
+    *,
+    watermark: bool = True,
+    max_src_len: int = 1024,
+    max_new_tokens: int = 256,
+    min_new_tokens: int = 64,
+    batch_size: int = 8,
+) -> list[dict]:
+    """Generate Chinese paraphrases with Llama 2 7B and (optionally) watermark them.
+
+    Returns list of dicts with keys: generated_text, score, is_watermarked, true_label.
     """
-    # Load XLSum test split for Chinese
+    tok, model, wm = model_components
+    model.eval()
+
+    # Prepare prompts
+    items = [ex for ex in dataset]
+    prompts: List[str] = []
+    for ex in items:
+        src = ex.get("text", None)
+        if isinstance(src, str) and src.strip():
+            prompt = (
+                "请将下面的中文文本进行同义改写，保持原意但使用不同且自然的表达方式：\n\n"
+                f"文本：\n{src.strip()}\n\n改写："
+            )
+        else:
+            prompt = ""
+        prompts.append(prompt)
+
+    outputs: List[str] = [""] * len(prompts)
+    logits_proc = None
+    if watermark and hasattr(wm, "logits_processor") and wm.logits_processor is not None:
+        logits_proc = LogitsProcessorList([wm.logits_processor])
+
+    # Batched generation
+    for i in tqdm(range(0, len(prompts), max(1, batch_size)), desc=f"Llama2 paraphrase ({'wm' if watermark else 'no-wm'})", unit="batch"):
+        batch = prompts[i:i + batch_size]
+        # Filter empties while preserving indices
+        idxs = [j for j, p in enumerate(batch) if p]
+        if not idxs:
+            continue
+        enc = tok(
+            [batch[j] for j in idxs],
+            return_tensors="pt",
+            truncation=True,
+            padding=True,
+            max_length=max_src_len,
+        )
+        enc = {k: v.to(model.device) for k, v in enc.items()}
+
+        with torch.no_grad():
+            # Enable AMP on CUDA for speed
+            if model.device.type == "cuda":
+                with torch.cuda.amp.autocast():
+                    out = model.generate(
+                        **enc,
+                        max_new_tokens=max_new_tokens,
+                        min_new_tokens=min_new_tokens,
+                        do_sample=True,
+                        temperature=0.8,
+                        top_p=0.95,
+                        num_beams=1,
+                        logits_processor=logits_proc,
+                        use_cache=True,
+                        pad_token_id=tok.pad_token_id,
+                        eos_token_id=tok.eos_token_id,
+                    )
+            else:
+                out = model.generate(
+                    **enc,
+                    max_new_tokens=max_new_tokens,
+                    min_new_tokens=min_new_tokens,
+                    do_sample=True,
+                    temperature=0.8,
+                    top_p=0.95,
+                    num_beams=1,
+                    logits_processor=logits_proc,
+                    use_cache=True,
+                    pad_token_id=tok.pad_token_id,
+                    eos_token_id=tok.eos_token_id,
+                )
+
+        attn = enc.get("attention_mask")
+        for k, j in enumerate(idxs):
+            in_len = int(attn[k].sum().item()) if attn is not None else int(enc["input_ids"].shape[1])
+            gen_ids = out[k][in_len:]
+            outputs[i + j] = tok.decode(gen_ids, skip_special_tokens=True).strip()
+
+    # Parallelize detection using tools.detect for speed
+    import pandas as _pd
+    tmp_df = _pd.DataFrame({"generated_text": outputs})
+    det_df = detect(tmp_df, wm, column="generated_text")
+
+    results: list[dict] = []
+    for idx in range(len(outputs)):
+        row = det_df.iloc[idx].to_dict() if idx < len(det_df) else {}
+        row["generated_text"] = outputs[idx]
+        row["true_label"] = 1 if watermark else 0
+        results.append(row)
+
+    return results
+
+
+def cwra_chinese_llama(algorithm: str, samples: int = 200, max_new_tokens: int = 256, batch_size: int = 8) -> list[dict]:
+    """Run CWRA with Llama 2 7B paraphrasing on Chinese XLSum texts, watermarked."""
     dataset = load_data("chinese_simplified")
+    picked = _select_samples(dataset, samples)
 
-    # Model + watermark for the requested algorithm
-    model_components = _load_xlsum_with_watermark(algorithm, max_new_tokens=max_new_tokens)
+    model_components = _load_llama_with_watermark(algorithm, max_new_tokens=max_new_tokens)
 
-    # Split into equal halves for watermarked vs non-watermarked generation
-    wm_samples, uwm_samples = split_dataset(dataset, sample_size=samples)
+    detections = _paraphrase_chinese(
+        model_components,
+        picked,
+        watermark=True,
+        max_new_tokens=max_new_tokens,
+        batch_size=batch_size,
+    )
 
-    det_wm = _generate_xlsum(model_components, wm_samples, watermark=True, max_new_tokens=max_new_tokens)
-    det_uwm = _generate_xlsum(model_components, uwm_samples, watermark=False, max_new_tokens=max_new_tokens)
-
-    detections = det_wm + det_uwm
-    df = pd.DataFrame(detections)
-
-    metrics = evaluate_detection(df)
-    return df, metrics
+    return detections
 
 
 if __name__ == "__main__":
-
-    # Run for both algorithms and save to DATA_PATH
-    for algo, out_name in (("XSIR", "XSIR_chinese.json"), ("KGW", "KGW_chinese.json")):
-        print(f"Running CWRA Chinese with {algo}...")
+    for algo in ("XSIR", "KGW"):
+        print(f"[cwra] Running Chinese CWRA with Llama2 7B and {algo} watermark...")
         try:
-            df, metrics = cwra_chinese(algorithm=algo, samples=200, max_new_tokens=256)
+            detections = cwra_chinese_llama(algorithm=algo, samples=200, max_new_tokens=256, batch_size=8)
+            out_name = f"{algo}_cwra_chinese.json"
             out_path = os.path.join(DATA_PATH, out_name)
-            df.to_json(out_path)
-            print(f"Saved detections to: {out_path}")
-            print("Metrics:", metrics)
-        except FileNotFoundError as e:
-            print(f"Skipping {algo}: {e}")
+            save_file(detections, filename=out_path)
+            print(f"[cwra] Saved detections to: {out_path}")
+        except Exception as e:
+            print(f"[cwra] Failed for {algo}: {e}")

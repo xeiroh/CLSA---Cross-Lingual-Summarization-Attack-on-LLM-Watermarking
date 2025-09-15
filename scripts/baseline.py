@@ -10,15 +10,15 @@ import os, warnings, logging
 # os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 
 try:
-    from transformers.utils import logging as hf_logging
-    hf_logging.set_verbosity_error()
+	from transformers.utils import logging as hf_logging
+	hf_logging.set_verbosity_error()
 except Exception:
-    pass
+	pass
 try:
-    from datasets.utils.logging import set_verbosity_error as ds_set_verbosity_error
-    ds_set_verbosity_error()
+	from datasets.utils.logging import set_verbosity_error as ds_set_verbosity_error
+	ds_set_verbosity_error()
 except Exception:
-    pass
+	pass
 
 def baseline(language="english", algorithm="KGW", samples=100, max_tokens=256):
 	model = load_model(max_tokens=max_tokens, algorithm=algorithm)

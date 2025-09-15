@@ -103,13 +103,13 @@ def load_data(language="english"):
 	can skip that run gracefully.
 	"""
 	try:
-		return load_dataset("csebuetnlp/xlsum", language, split="test", download_mode="reuse_cache_if_exists")
+		return load_dataset("csebuetnlp/xlsum", language, split="test")
 	except Exception as e:
 		fallback = "english"
 		if language != fallback:
 			print(f"Warning: XLSum config '{language}' not available (offline or not cached). Falling back to '{fallback}'. Error: {e}")
 		try:
-			return load_dataset("csebuetnlp/xlsum", fallback, split="test", download_mode="reuse_cache_if_exists")
+			return load_dataset("csebuetnlp/xlsum", fallback, split="test")
 		except Exception as e2:
 			raise FileNotFoundError(f"Failed to load XLSum for '{language}' and fallback '{fallback}'. {e2}") from e
 
