@@ -47,13 +47,18 @@ def clsa(detections, algorithm, language):
 if __name__ == "__main__":
 
 	languages = ["spanish", "chinese", "hindi", "swahili", "amharic"]
-	algorithms = ["Unigram", "KGW", "XSIR", "SIR"]
+	algorithms = ["XSIR", "KGW", "Unigram", "SIR"]
 
 	# languages = ["spanish"]
 	# algorithms = ["Unigram"]
 
+	completed = {"spanish": ["KGW", "Unigram"]}
+
 	for lang in languages:
 		for algo in algorithms:
+			if lang in completed and algo in completed[lang]:
+				print(f"Skipping {lang} with {algo} (already done)")
+				continue
 			print(f"Processing {lang} with {algo}")
 			# file_path = os.path.join(DATA_PATH, f"{algo}.json")
 			file_path = os.path.join(DATA_PATH, f"{algo}.json")
