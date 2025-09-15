@@ -4,10 +4,10 @@ import numpy as np
 import pandas as pd
 import os, warnings, logging
 
-os.environ.setdefault("PYTHONWARNINGS", "ignore")              # silence Python warnings
-os.environ.setdefault("TRANSFORMERS_VERBOSITY", "error")
-os.environ.setdefault("HF_DATASETS_VERBOSITY", "error")
-os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+# os.environ.setdefault("PYTHONWARNINGS", "ignore")              # silence Python warnings
+# os.environ.setdefault("TRANSFORMERS_VERBOSITY", "error")
+# os.environ.setdefault("HF_DATASETS_VERBOSITY", "error")
+# os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 
 try:
     from transformers.utils import logging as hf_logging
@@ -36,7 +36,7 @@ def baseline(language="english", algorithm="KGW", samples=100, max_tokens=256):
 
 if __name__ == "__main__":
 	# Use "Unbiased" as the label; tools maps it to the correct implementation
-	algorithms = ["SIR"] # NOTE: change code to adapt to pandas for evaluate
+	algorithms = ["SIR", "XSIR", "Unigram", "KGW"]
 
 	lang = "english"
 	for algo in algorithms:

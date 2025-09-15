@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import pandas as pd
+
 DATA_PATH=os.path.join(os.path.dirname(__file__), "..", "data")
 
 import numpy as np
@@ -13,7 +14,7 @@ from sklearn.metrics import (
 def evaluate_detection(
 	test_df: pd.DataFrame,
 	val_df: pd.DataFrame | None = None,
-	*,
+	use_val: bool = True,
 	select_mode: str = "youden",   # "youden" or "target_fpr"
 	target_fpr: float = 0.01,
 	flip_if_needed: bool = False
@@ -35,6 +36,9 @@ def evaluate_detection(
 	Returns a dict with AUROC, AUPRC, EER@test, TPR@FPR=target_fpr@test,
 	and Accuracy/Precision/Recall/F1 at the chosen threshold.
 	"""
+
+	if use_val and val_df is None:
+		val_df, test_df = split_data(test_df)
 	
 	req_cols = {"true_label", "score"}
 	for name, df in (("test_df", test_df), ("val_df", val_df)):
@@ -181,6 +185,12 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
 	df["score"] = df["score"].dropna().astype(float)
 	return df
 
+def split_data(df):
+	n = len(df)
+	val_df = pd.concat([df.iloc[:n//5], df.iloc[4*n//5:]], ignore_index=True)
+	test_df = df.iloc[n//5:4*n//5].reset_index(drop=True)
+	return clean_data(val_df), clean_data(test_df)
+
 def evaluate_from_file(name, find_by_algorithm=True, select_mode='youden', target_fpr=0.01):
 	if find_by_algorithm:
 		filename = os.path.join(DATA_PATH, f'{name}_detections.json')
@@ -188,10 +198,7 @@ def evaluate_from_file(name, find_by_algorithm=True, select_mode='youden', targe
 		filename = os.path.join(DATA_PATH, name)
 		
 	data = pd.read_json(filename)
-	n = len(data)
-	val_data = pd.concat([data.iloc[:n//5], data.iloc[4*n//5:]], ignore_index=True)
-	test_data = data.iloc[n//5:4*n//5].reset_index(drop=True)
-	val_data, test_data = clean_data(val_data), clean_data(test_data)
+	val_data, test_data = split_data(data)
 	# print(val_data)
 	# print(test_data)
 	results = evaluate_detection(test_df=test_data, val_df=val_data, select_mode=select_mode, target_fpr=target_fpr)

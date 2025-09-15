@@ -20,7 +20,9 @@ import numpy as np
 import pandas as pd
 from functools import lru_cache
 
-SIR_MAPPING_DIR = os.path.join("workspace", "CLSA---Cross-Lingual-Summarization-Attack-on-LLM-Watermarking", ".venv", "lib", "python3.12", "site-packages", "markllm", "watermark", "sir", "mapping")  # Adjust as needed
+from evaluation import DATA_PATH
+
+# SIR_MAPPING_DIR = os.path.join("workspace", "CLSA---Cross-Lingual-Summarization-Attack-on-LLM-Watermarking", ".venv", "lib", "python3.12", "site-packages", "markllm", "watermark", "sir", "mapping")  # Adjust as needed
 
 warnings.filterwarnings("ignore")  # transformers logging
 # Avoid transformers using torch.inference_mode inside generate (causes XSIR/SIR issues)
@@ -29,8 +31,8 @@ _os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 
 # device = "mps" if torch.backends.mps.is_available() else "cpu"
 device = "cuda" if torch.cuda.is_available() else "cpu"
-torch.backends.cuda.matmul.allow_tf32 = True
-torch.set_float32_matmul_precision("high")
+# torch.backends.cuda.matmul.allow_tf32 = True
+# torch.set_float32_matmul_precision("high")
 RESULTS_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "results")
 
 def load_model(model_name: str | None = None, algorithm: str = "KGW", max_tokens: int = 256):
@@ -190,7 +192,7 @@ def load_file(filename: str, as_json: bool | None = None):
 	path = Path(filename)
 	# If given a bare filename or non-existent relative path, try under RESULTS_PATH
 	if not path.is_absolute() and not path.exists():
-		candidate = Path(RESULTS_PATH) / path
+		candidate = Path(DATA_PATH) / path
 		if candidate.exists():
 			path = candidate
 	if not path.exists():
@@ -252,9 +254,9 @@ def generate(model_components, dataset, watermark: bool, max_chars=1500, max_tok
 		# Build a lean instruction (avoid adding <s> manually)
 		prompt = f"Read the following article and summarize the key points in 5 to 10 sentences. Each sentence should capture an important part of the text.\n\nArticle:\n{src}\n\nSummary:"
 		enc = tokenizer(prompt, return_tensors="pt")
-		emb_device = gen_model.get_input_embeddings().weight.device
-		enc = {k: v.to(emb_device) for k, v in enc.items()}
-		# enc = {k: v.to(device) for k, v in enc.items()}
+		# emb_device = gen_model.get_input_embeddings().weight.device
+		# enc = {k: v.to(emb_device) for k, v in enc.items()}
+		enc = {k: v.to(device) for k, v in enc.items()}
 
 		prompt_len = enc["input_ids"].shape[1]
 
@@ -273,7 +275,7 @@ def generate(model_components, dataset, watermark: bool, max_chars=1500, max_tok
 				top_p=0.95,
 				logits_processor=logits_proc,
 				use_cache=True, # was False
-				num_beams=1,
+				num_beams=2,
 			)
 
 		# Slice off the prompt tokens
