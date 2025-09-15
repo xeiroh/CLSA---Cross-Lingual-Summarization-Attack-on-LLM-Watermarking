@@ -7,18 +7,18 @@
     "n_pos_val": 100,
     "n_neg_val": 100
   },
-  "threshold": -0.0008514380013501203,
+  "threshold": 0.20501009877337967,
   "threshold_source": "validation",
-  "auroc@test": 0.4907111111111111,
-  "auprc@test": 0.508717805547314,
-  "accuracy@thr": 0.52,
-  "precision@thr": 0.5241935483870968,
-  "recall@thr": 0.43333333333333335,
-  "f1@thr": 0.4744525547445255,
-  "eer@test": 0.4866666666666667,
+  "auroc@test": 0.5095111111111111,
+  "auprc@test": 0.49388702693927544,
+  "accuracy@thr": 0.4866666666666667,
+  "precision@thr": 0.25,
+  "recall@thr": 0.013333333333333334,
+  "f1@thr": 0.02531645569620253,
+  "eer@test": 0.48,
   "tpr@fpr=0.010@test": 0.0,
   "selection_details": {
-    "eer_sel": 0.48,
-    "thr_eer_sel": -0.010586184231524772
+    "eer_sel": 0.49,
+    "thr_eer_sel": -0.05390043665723103
   }
 }

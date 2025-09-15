@@ -170,8 +170,17 @@ def _paraphrase_chinese(
     return results
 
 
-def cwra_chinese_llama(algorithm: str, samples: int = 200, max_new_tokens: int = 256, batch_size: int = 8) -> list[dict]:
-    """Run CWRA with Llama 2 7B paraphrasing on Chinese XLSum texts, watermarked."""
+def cwra_chinese_llama(
+    algorithm: str,
+    samples: int = 200,
+    max_new_tokens: int = 256,
+    batch_size: int = 8,
+    watermark: bool = False,
+) -> list[dict]:
+    """Run CWRA with Llama 2 7B paraphrasing on Chinese XLSum texts.
+
+    By default generates UNWATERMARKED paraphrases (watermark=False).
+    """
     dataset = load_data("chinese_simplified")
     picked = _select_samples(dataset, samples)
 
@@ -180,7 +189,7 @@ def cwra_chinese_llama(algorithm: str, samples: int = 200, max_new_tokens: int =
     detections = _paraphrase_chinese(
         model_components,
         picked,
-        watermark=True,
+        watermark=watermark,
         max_new_tokens=max_new_tokens,
         batch_size=batch_size,
     )
@@ -189,13 +198,34 @@ def cwra_chinese_llama(algorithm: str, samples: int = 200, max_new_tokens: int =
 
 
 if __name__ == "__main__":
-    for algo in ("XSIR", "KGW"):
-        print(f"[cwra] Running Chinese CWRA with Llama2 7B and {algo} watermark...")
+    import json
+
+    algo = "XSIR"
+    print(f"[cwra] Running Chinese CWRA (unwatermarked) with Llama2 7B and {algo} detector...")
+    try:
+        detections = cwra_chinese_llama(
+            algorithm=algo,
+            samples=200,
+            max_new_tokens=256,
+            batch_size=8,
+            watermark=False,
+        )
+
+        # Append to existing XSIR_cwra_chinese.json if present
+        out_name = f"{algo}_cwra_chinese.json"
+        out_path = os.path.join(DATA_PATH, out_name)
+        existing: list[dict] = []
         try:
-            detections = cwra_chinese_llama(algorithm=algo, samples=200, max_new_tokens=256, batch_size=8)
-            out_name = f"{algo}_cwra_chinese.json"
-            out_path = os.path.join(DATA_PATH, out_name)
-            save_file(detections, filename=out_path)
-            print(f"[cwra] Saved detections to: {out_path}")
+            if os.path.exists(out_path):
+                with open(out_path, "r") as f:
+                    loaded = json.load(f)
+                    if isinstance(loaded, list):
+                        existing = loaded
         except Exception as e:
-            print(f"[cwra] Failed for {algo}: {e}")
+            print(f"[cwra] Warning: failed to read existing file {out_path}: {e}")
+
+        combined = existing + detections
+        save_file(combined, filename=out_path)
+        print(f"[cwra] Appended {len(detections)} unwatermarked samples. Saved to: {out_path}")
+    except Exception as e:
+        print(f"[cwra] Failed for {algo}: {e}")

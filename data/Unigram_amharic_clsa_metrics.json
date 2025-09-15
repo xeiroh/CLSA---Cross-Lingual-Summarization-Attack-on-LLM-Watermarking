@@ -1,0 +1,24 @@
+{
+  "sample_sizes": {
+    "n_test": 300,
+    "n_pos_test": 150,
+    "n_neg_test": 150,
+    "n_val": 200,
+    "n_pos_val": 100,
+    "n_neg_val": 100
+  },
+  "threshold": 1.6035674514745464,
+  "threshold_source": "validation",
+  "auroc@test": 0.5548222222222222,
+  "auprc@test": 0.5494873061812994,
+  "accuracy@thr": 0.5366666666666666,
+  "precision@thr": 0.526829268292683,
+  "recall@thr": 0.72,
+  "f1@thr": 0.6084507042253521,
+  "eer@test": 0.4766666666666667,
+  "tpr@fpr=0.010@test": 0.0,
+  "selection_details": {
+    "eer_sel": 0.44999999999999996,
+    "thr_eer_sel": 4.245349044041859
+  }
+}
