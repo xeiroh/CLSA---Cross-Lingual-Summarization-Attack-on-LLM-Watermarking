@@ -1,0 +1,15 @@
+# Fdb version 4
+["pdflatex"] 1757969459.17482 "neurips_2025.tex" "neurips_2025.pdf" "neurips_2025" 1757969459.52031 2
+  "/usr/local/texlive/2025/texmf-dist/tex/latex/base/article.cls" 1738182759 20144 63d8bacaf52e5abf4db3bc322373e1d4 ""
+  "/usr/local/texlive/2025/texmf-dist/tex/latex/base/size10.clo" 1738182759 8448 5cf247d4bd0c7d5d711bbbdf111fae2e ""
+  "/usr/local/texlive/2025/texmf-dist/web2c/texmf.cnf" 1739380943 42148 61becc7c670cd061bb319c643c27fdd4 ""
+  "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1741450574 3345740 46b66fdb0378f7bf5921b5eabf1762b8 ""
+  "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
+  "neurips_2025.aux" 1757969459.17443 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "neurips_2025.sty" 0 -1 0 ""
+  "neurips_2025.tex" 1757969428.23239 45130 c152274409863d410b314c56e253ebc3 ""
+  (generated)
+  "neurips_2025.aux"
+  "neurips_2025.log"
+  "neurips_2025.pdf"
+  (rewritten before read)

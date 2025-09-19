@@ -1,0 +1,38 @@
+\begin{thebibliography}{3}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[He et~al.(2024)He, Zhou, Hao, Liu, Wang, Tu, Zhang, and
+  Wang]{He2024cwra}
+Zhiwei He, Binglin Zhou, Hongkun Hao, Aiwei Liu, Xing Wang, Zhaopeng Tu,
+  Zhuosheng Zhang, and Rui Wang.
+\newblock Can watermarks survive translation? on the cross-lingual consistency
+  of text watermark for large language models.
+\newblock In \emph{Proceedings of the 62nd Annual Meeting of the Association
+  for Computational Linguistics (Volume 1: Long Papers)}, pages 4115--4129,
+  Bangkok, Thailand, August 2024. Association for Computational Linguistics.
+\newblock \doi{10.18653/v1/2024.acl-long.226}.
+\newblock URL \url{https://aclanthology.org/2024.acl-long.226/}.
+
+\bibitem[Kirchenbauer et~al.(2023)Kirchenbauer, Geiping, Wen, Katz, Miers, and
+  Goldstein]{kirchenbauer2023watermark}
+John Kirchenbauer, Jonas Geiping, Yuxin Wen, Jonathan Katz, Ian Miers, and Tom
+  Goldstein.
+\newblock A watermark for large language models.
+\newblock In \emph{Proceedings of the 40th International Conference on Machine
+  Learning}, volume 202 of \emph{Proceedings of Machine Learning Research},
+  pages 17061--17084. PMLR, 2023.
+\newblock URL \url{https://proceedings.mlr.press/v202/kirchenbauer23a.html}.
+
+\bibitem[Liu et~al.(2024)Liu, Pan, Hu, Meng, and Wen]{liu2024sir}
+Aiwei Liu, Leyi Pan, Xuming Hu, Shiao Meng, and Lijie Wen.
+\newblock A semantic invariant robust watermark for large language models.
+\newblock In \emph{The Twelfth International Conference on Learning
+  Representations}, 2024.
+\newblock URL \url{https://openreview.net/forum?id=6p8lpe4MNf}.
+\newblock ICLR 2024.
+
+\end{thebibliography}

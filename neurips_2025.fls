@@ -1,0 +1,11 @@
+PWD /Users/gokulganesan/projects_local/CLSA---Cross-Lingual-Summarization-Attack-on-LLM-Watermarking
+INPUT /usr/local/texlive/2025/texmf.cnf
+INPUT /usr/local/texlive/2025/texmf-dist/web2c/texmf.cnf
+INPUT /usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt
+INPUT neurips_2025.tex
+OUTPUT neurips_2025.log
+INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/base/article.cls
+INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/base/article.cls
+INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/base/size10.clo
+INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/base/size10.clo
+INPUT /usr/local/texlive/2025/texmf-dist/tex/latex/base/size10.clo
