@@ -1,0 +1,95 @@
+\begin{thebibliography}{8}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Fan et~al.(2021)Fan, Bhosale, Schwenk, Ma, El-Kishky, Goyal, Baines,
+  Celebi, Wenzek, Chaudhary, Goyal, Birch, Liptchinsky, Edunov, Grave, Auli,
+  and Joulin]{fan2021beyond}
+Angela Fan, Shruti Bhosale, Holger Schwenk, Zhiyi Ma, Ahmed El-Kishky,
+  Siddharth Goyal, Mandeep Baines, Onur Celebi, Guillaume Wenzek, Vishrav
+  Chaudhary, Naman Goyal, Tom Birch, Vitaliy Liptchinsky, Sergey Edunov,
+  Edouard Grave, Michael Auli, and Armand Joulin.
+\newblock Beyond english-centric multilingual machine translation.
+\newblock In \emph{Journal of Machine Learning Research}, volume~22, pages
+  1--48, 2021.
+\newblock URL \url{http://jmlr.org/papers/v22/20-1307.html}.
+
+\bibitem[Hasan et~al.(2021)Hasan, Ahmed, Abdullah, Chy, Humayun, Paul, Kobra,
+  Sarkar, Sultana, Deepak, et~al.]{hasan2021xl}
+Tahmid Hasan, Abhik Ahmed, Kazi~Samin Abdullah, Abu~Nowshed Chy, Ameer Humayun,
+  Anindya Paul, Arafat~Sultan Kobra, Shafiq Sarkar, Md~Tahmid~Hasan Sultana,
+  Rakib Deepak, et~al.
+\newblock Xl-sum: Large-scale multilingual abstractive summarization for 44
+  languages.
+\newblock In \emph{Findings of the Association for Computational Linguistics:
+  ACL-IJCNLP 2021}, pages 4693--4703. Association for Computational
+  Linguistics, 2021.
+\newblock \doi{10.18653/v1/2021.findings-acl.413}.
+\newblock URL \url{https://aclanthology.org/2021.findings-acl.413}.
+
+\bibitem[He et~al.(2024)He, Zhou, Hao, Liu, Wang, Tu, Zhang, and
+  Wang]{He2024cwra}
+Zhiwei He, Binglin Zhou, Hongkun Hao, Aiwei Liu, Xing Wang, Zhaopeng Tu,
+  Zhuosheng Zhang, and Rui Wang.
+\newblock Can watermarks survive translation? on the cross-lingual consistency
+  of text watermark for large language models.
+\newblock In \emph{Proceedings of the 62nd Annual Meeting of the Association
+  for Computational Linguistics (Volume 1: Long Papers)}, pages 4115--4129,
+  Bangkok, Thailand, August 2024. Association for Computational Linguistics.
+\newblock \doi{10.18653/v1/2024.acl-long.226}.
+\newblock URL \url{https://aclanthology.org/2024.acl-long.226/}.
+
+\bibitem[Kirchenbauer et~al.(2023)Kirchenbauer, Geiping, Wen, Katz, Miers, and
+  Goldstein]{kirchenbauer2023watermark}
+John Kirchenbauer, Jonas Geiping, Yuxin Wen, Jonathan Katz, Ian Miers, and Tom
+  Goldstein.
+\newblock A watermark for large language models.
+\newblock In \emph{Proceedings of the 40th International Conference on Machine
+  Learning}, volume 202 of \emph{Proceedings of Machine Learning Research},
+  pages 17061--17084. PMLR, 2023.
+\newblock URL \url{https://proceedings.mlr.press/v202/kirchenbauer23a.html}.
+
+\bibitem[Liu et~al.(2024)Liu, Pan, Hu, Meng, and Wen]{liu2024sir}
+Aiwei Liu, Leyi Pan, Xuming Hu, Shiao Meng, and Lijie Wen.
+\newblock A semantic invariant robust watermark for large language models.
+\newblock In \emph{The Twelfth International Conference on Learning
+  Representations}, 2024.
+\newblock URL \url{https://openreview.net/forum?id=6p8lpe4MNf}.
+\newblock ICLR 2024.
+
+\bibitem[Pan et~al.(2024)Pan, Liu, He, Gao, Zhao, Lu, Zhou, Liu, Hu, Wen, King,
+  and Yu]{pan2024marklllm}
+Leyi Pan, Aiwei Liu, Zhiwei He, Zitian Gao, Xuandong Zhao, Yijian Lu, Binglin
+  Zhou, Shuliang Liu, Xuming Hu, Lijie Wen, Irwin King, and Philip~S. Yu.
+\newblock Markllm: An open-source toolkit for llm watermarking.
+\newblock In \emph{Proceedings of the 2024 Conference on Empirical Methods in
+  Natural Language Processing: System Demonstrations}, pages 61--71, Miami,
+  Florida, USA, November 2024. Association for Computational Linguistics.
+\newblock \doi{10.18653/v1/2024.emnlp-demo.7}.
+\newblock URL \url{https://aclanthology.org/2024.emnlp-demo.7/}.
+
+\bibitem[Xue et~al.(2021)Xue, Constant, Roberts, Kale, Al-Rfou, Siddhant,
+  Barua, and Raffel]{xue2021mt5}
+Linting Xue, Noah Constant, Adam Roberts, Mihir Kale, Rami Al-Rfou, Aditya
+  Siddhant, Aditya Barua, and Colin Raffel.
+\newblock mt5: A massively multilingual pre-trained text-to-text transformer.
+\newblock In \emph{Proceedings of the 2021 Conference of the North American
+  Chapter of the Association for Computational Linguistics: Human Language
+  Technologies}, pages 483--498, Online, June 2021. Association for
+  Computational Linguistics.
+\newblock \doi{10.18653/v1/2021.naacl-main.41}.
+\newblock URL \url{https://aclanthology.org/2021.naacl-main.41}.
+
+\bibitem[Zhang et~al.(2020)Zhang, Zhao, Saleh, and Liu]{zhang2020pegasus}
+Jingqing Zhang, Yao Zhao, Mohammad Saleh, and Peter~J. Liu.
+\newblock Pegasus: Pre-training with extracted gap-sentences for abstractive
+  summarization.
+\newblock In \emph{Proceedings of the 37th International Conference on Machine
+  Learning}, volume 119 of \emph{Proceedings of Machine Learning Research},
+  pages 11328--11339. PMLR, 2020.
+\newblock URL \url{http://proceedings.mlr.press/v119/zhang20ae.html}.
+
+\end{thebibliography}
