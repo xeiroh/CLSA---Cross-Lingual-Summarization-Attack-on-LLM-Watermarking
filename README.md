@@ -1,7 +1,7 @@
 # CLSA: Cross-Lingual Summarization Attack on LLM Watermarking
 
 ## 📄 Research Paper
-**[📖 Read the Full Paper](Styles/publication.pdf)** - *CLSA: Cross-Lingual Summarization Attack on LLM Watermarking* (NeurIPS 2025 Workshop Submission)
+**[📖 Read the Full Paper](Styles/publication.pdf)** - *CLSA: Cross-Lingual Summarization Attack on LLM Watermarking* 
 
 ---
 
@@ -168,5 +168,3 @@ CLSA maintains reasonable summary quality while degrading detection:
 This research is conducted for academic purposes to identify vulnerabilities in watermarking systems and improve their robustness. The findings highlight important security considerations for deployed watermarking schemes and should inform the development of more resilient detection methods.
 
 ---
-
-*This repository contains the complete experimental setup, results, and analysis for NeurIPS 2025 workshop submission on cross-lingual summarization attacks against LLM watermarking.*
