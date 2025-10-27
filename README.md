@@ -1,7 +1,7 @@
 # CLSA: Cross-Lingual Summarization Attack on LLM Watermarking
 
 ## 📄 Research Paper
-**[📖 Read the Full Paper](Styles/publication.pdf)** - *CLSA: Cross-Lingual Summarization Attack on LLM Watermarking* (NeurIPS 2025 Workshop Submission)
+**[📖 Read the Full Paper](Styles/clsa_independent.pdf)** - *CLSA: Cross-Lingual Summarization Attack on LLM Watermarking*
 
 ---
 
@@ -102,8 +102,8 @@ This repository presents **CLSA (Cross-Lingual Summarization Attack)**, a novel 
 
 ```
 ├── Styles/                     # LaTeX paper and publication files
-│   ├── publication.pdf         # Full research paper (with author info)
-│   ├── neurips_2025.tex       # Anonymous workshop submission
+│   ├── clsa.pdf               # Full research paper
+│   ├── neurips_2025.tex       # LaTeX source
 │   └── refs.bib              # Bibliography
 ├── scripts/                   # Experimental code and analysis
 │   ├── plots/                # Generated figures and visualizations

@@ -1,7 +1,6 @@
 \documentclass{article}
 
-\usepackage[dblblindworkshop]{neurips_2025}
-\workshoptitle{Lock-LLM}
+\usepackage[preprint]{neurips_2025}
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -18,10 +17,8 @@
 \title{CLSA: Cross-Lingual Summarization as a Black-Box Watermark Removal Attack}
 
 \author{Gokul Ganesan \\
-  Department of Computer Science\\
-  New York University\\
-  New York, NY 10003 \\
-  \texttt{gokul@nyu.edu, gokulganesan3@gmail.com} \\
+  Independent Researcher \\
+  \texttt{gg@gokul.gg, gokul@nyu.edu} \\
 }
 
 \begin{document}
@@ -29,23 +26,23 @@
 \maketitle
 
 \begin{abstract}
-Watermarking has been proposed as a lightweight mechanism to identify AI-generated text, with schemes typically relying on perturbations to token distributions. While prior work shows that paraphrasing can weaken such signals, these attacks remain partially detectable or degrade text quality. We demonstrate that cross-lingual summarization attacks (CLSA) — translation to a pivot language followed by summarization and optional back-translation — constitutes a qualitatively stronger attack vector. By forcing a semantic bottleneck across languages, CLSA systematically destroys token-level statistical biases while preserving semantic fidelity. In experiments across multiple watermarking schemes (KGW, SIR, XSIR, Unigram) and five languages (Amharic, Chinese, Hindi, Spanish, Swahili), we show that CLSA reduces watermark detection accuracy more effectively than monolingual paraphrase at similar quality levels. Our results highlight an underexplored vulnerability that challenges the practicality of watermarking for provenance or regulation. We argue that robust provenance solutions must move beyond distributional watermarking and incorporate cryptographic or model-attestation approaches. On 300 held-out samples per language, CLSA consistently drives detection toward chance while preserving task utility, and it outperforms back-translation in most settings. Concretely for \textbf{XSIR} (explicitly designed for cross-lingual robustness), AUROC with paraphrasing is $0.827$, with Cross-Lingual Watermark Removal Attacks (CWRA)~\citep{He2024cwra} using \emph{Chinese} as the pivot it is $0.823$, whereas CLSA drives it down to $0.53$ (near chance). Results highlight a practical, low-cost removal pathway that crosses languages and compresses content without visible artifacts.
+Watermarking has been proposed as a lightweight mechanism to identify AI-generated text, with schemes typically relying on perturbations to token distributions. While prior work shows that paraphrasing can weaken such signals, these attacks remain partially detectable or degrade text quality. We demonstrate that cross-lingual summarization attacks (CLSA) — translation to a pivot language followed by summarization and optional back-translation — constitutes a qualitatively stronger attack vector. By forcing a semantic bottleneck across languages, CLSA systematically destroys token-level statistical biases while preserving semantic fidelity. In experiments across multiple watermarking schemes (KGW, SIR, XSIR, Unigram) and five languages (Amharic, Chinese, Hindi, Spanish, Swahili), we show that CLSA reduces watermark detection accuracy more effectively than monolingual paraphrase at similar quality levels. Our results highlight an underexplored vulnerability that challenges the practicality of watermarking for provenance or regulation. We argue that robust provenance solutions must move beyond distributional watermarking and incorporate cryptographic or model-attestation approaches. On 300 held-out samples per language, CLSA consistently drives detection toward chance while preserving task utility. Concretely for \textbf{XSIR} (explicitly designed for cross-lingual robustness), AUROC with paraphrasing is $0.827$, with Cross-Lingual Watermark Removal Attacks (CWRA)~\citep{He2024cwra} using \emph{Chinese} as the pivot it is $0.823$, whereas CLSA drives it down to $0.53$ (near chance). Results highlight a practical, low-cost removal pathway that crosses languages and compresses content without visible artifacts.
 \end{abstract}
 
 \section{Introduction}
 
 Text watermarking aims to embed provenance signals in generative outputs by slightly biasing token sampling. In practice, these signals must survive downstream editing, translation, and summarization if they are to support provenance or policy enforcement in realistic workflows. Prior work has shown that monolingual paraphrasing or back-translation can weaken detectors, but the effect is uneven and often trades off with utility. We study a more damaging and practical transformation: a Cross-Lingual Summarization Attack (CLSA) that first translates a watermarked passage into a pivot language, then compresses it with abstractive summarization, optionally followed by back-translation to the original language. This pipeline forces a semantic bottleneck and alters subword structure and length statistics in ways that jointly target the cues exploited by modern detectors.
 
-Our evaluation combines four representative detectors—KGW, SIR, XSIR, and Unigram—with five languages spanning diverse morphology and scripts (Amharic, Chinese, Hindi, Swahili, Spanish). Using public translation and summarization models (M2M100 and mT5/XLSum), we compare CLSA against back-translation, monolingual paraphrasing, and cross-lingual rewriting without summarization (CWRA)~\citep{He2024cwra} on held-out sets (300 test and 200 validation samples per language). Across detectors and languages, CLSA consistently drives detection toward chance while maintaining short, readable outputs. For example, representative AUROCs for CLSA cluster around 0.5 for XSIR on Amharic (~0.49), Chinese (~0.54), and Spanish (~0.51), and remain low for KGW on Spanish (~0.58), whereas back-translation and paraphrasing often leave stronger residual signals (e.g., Unigram on Hindi ~0.61 under back-translation). In addition, TPR at 1% FPR is typically near zero under CLSA, indicating detectors struggle to operate at low false-positive rates.
+Our evaluation combines four representative detectors—KGW, SIR, XSIR, and Unigram—with five languages spanning diverse morphology and scripts (Amharic, Chinese, Hindi, Swahili, Spanish). Using public translation and summarization models (M2M100 and mT5/XLSum), we compare CLSA against monolingual paraphrasing and cross-lingual rewriting without summarization (CWRA)~\citep{He2024cwra} on held-out sets (300 test and 200 validation samples per language). Across detectors and languages, CLSA consistently drives detection toward chance while maintaining short, readable outputs. For example, representative AUROCs for CLSA cluster around 0.5 for XSIR on Amharic (~0.49), Chinese (~0.54), and Spanish (~0.51), and remain low for KGW on Spanish (~0.58). In addition, TPR at 1% FPR is typically near zero under CLSA, indicating detectors struggle to operate at low false-positive rates.
 
-Why does CLSA work better than simpler transformations? Summarization removes many seeded positions and collapses multiple paraphrastic realizations into a shorter form, disrupting local n-gram and position-dependent patterns. Cross-lingual translation perturbs tokenization boundaries and vocabulary support, further diluting distributional biases. Empirically, we observe higher EER and lower Accuracy@thr and F1@thr for CLSA than for back-translation or paraphrase at comparable utility levels, suggesting the combination of cross-lingual rewriting and length compression is the key lever rather than either component alone.
+Why does CLSA work better than simpler transformations? Summarization removes many seeded positions and collapses multiple paraphrastic realizations into a shorter form, disrupting local n-gram and position-dependent patterns. Cross-lingual translation perturbs tokenization boundaries and vocabulary support, further diluting distributional biases. Empirically, we observe higher EER and lower Accuracy@thr and F1@thr for CLSA than for paraphrase at comparable utility levels, suggesting the combination of cross-lingual rewriting and length compression is the key lever rather than either component alone.
 
 From a deployment standpoint, the attack is black-box and low-cost. It requires no access to watermark keys or detector internals, relies only on commodity models, and yields outputs that remain useful for common downstream tasks. This raises a concrete risk for watermark-based provenance: adversaries can remove signals without heavy optimization or bespoke training, and they can do so across languages where detectors may already be brittle.
 
 We position our contributions as follows:
 \begin{enumerate}
     \item \textbf{Attack formulation:} We define CLSA and provide a simple black-box pipeline using public translation and summarization models.
-    \item \textbf{Multi-language, multi-detector study:} We evaluate KGW, SIR, XSIR, and Unigram across Amharic, Chinese, Hindi, Swahili, and Spanish, and benchmark against back-translation, paraphrasing, and CWRA~\citep{He2024cwra}.
+    \item \textbf{Multi-language, multi-detector study:} We evaluate KGW, SIR, XSIR, and Unigram across Amharic, Chinese, Hindi, Swahili, and Spanish, and benchmark against paraphrasing and CWRA~\citep{He2024cwra}.
     \item \textbf{Mechanistic analysis:} We explain why summarization plus cross-lingual transfer suppresses seeded-token bias, n-gram locality, and support overlap more than translation alone.
     \item \textbf{Implications and defenses:} We discuss length-aware detectors and semantic-clustered watermarking as partial mitigations, and argue for augmenting distributional watermarks with cryptographic or attestation-based provenance signals.
 \end{enumerate}
@@ -110,7 +107,7 @@ CWRA~\citep{He2024cwra} alters lexical realization through cross-lingual transfe
 
 \textbf{Computational resources.} All experiments were conducted on a single NVIDIA RTX 4090 GPU with 32GB VRAM and 64GB system RAM. The complete experimental pipeline, including watermark generation, attack implementation, and evaluation across all detector-language combinations, required approximately 3 days of total computation time.
 
-\textbf{Baselines.} We compare CLSA against: (1) \textbf{Baseline}: original watermarked text without transformation; (2) \textbf{Paraphrase}: monolingual paraphrasing using Pegasus~\citep{zhang2020pegasus}; (3) \textbf{CWRA}: cross-lingual watermark removal attack that prompts in pivot language and back-translates; (4) \textbf{Back-translation}: simple translate-and-translate-back without summarization.
+\textbf{Baselines.} We compare CLSA against: (1) \textbf{Baseline}: original watermarked text without transformation; (2) \textbf{Paraphrase}: monolingual paraphrasing using Pegasus~\citep{zhang2020pegasus}; (3) \textbf{CWRA}: cross-lingual watermark removal attack that prompts in pivot language and back-translates.
 
 \textbf{Evaluation metrics.} Beyond detection metrics, we monitor semantic preservation through length ratios and qualitative assessment. While automated quality metrics like ROUGE could be included, our focus is on the fundamental detectability vs. utility trade-off in adversarial settings.
 
@@ -145,7 +142,7 @@ Unigram & Spanish & 0.991 & 0.674 & 0.647 \\
 \end{figure}
 
 \textbf{Headline finding.}
-Across KGW, SIR, XSIR, and Unigram, CLSA pushes detectors toward chance on all five languages with short, readable outputs. In Table~\ref{tab:auroc}, AUROCs under CLSA hover near 0.5 for XSIR on Amharic ($\approx$0.49), Chinese ($\approx$0.54), and Spanish ($\approx$0.51), and remain low for KGW on Spanish ($\approx$0.58). Back-translation and paraphrasing often leave stronger residual signal (e.g., Unigram on Hindi $\approx$0.61 under back-translation vs. $\approx$0.42 under CLSA). Figure~\ref{fig:summary-bars} shows the same trend across other metrics: EER rises under CLSA, while TPR@1\% FPR is typically near zero, indicating detectors cannot operate at low false-positive rates.
+Across KGW, SIR, XSIR, and Unigram, CLSA pushes detectors toward chance on all five languages with short, readable outputs. In Table~\ref{tab:auroc}, AUROCs under CLSA hover near 0.5 for XSIR on Amharic ($\approx$0.49), Chinese ($\approx$0.54), and Spanish ($\approx$0.51), and remain low for KGW on Spanish ($\approx$0.58). Figure~\ref{fig:summary-bars} shows the same trend across other metrics: EER rises under CLSA, while TPR@1\% FPR is typically near zero, indicating detectors cannot operate at low false-positive rates.
 
 \textbf{XSIR stress test (cross-lingual robustness).}
 For \textbf{XSIR} watermarking—explicitly designed for cross-lingual robustness—the AUROC under \emph{paraphrasing the base text} is $0.827$; under \emph{CWRA} with \emph{Chinese} as the pivot it is $0.823$; and under our \emph{CLSA} it falls to $0.53$, demonstrating that even the most robust cross-lingual watermarking scheme succumbs to our attack.
@@ -159,7 +156,7 @@ KGW and Unigram show dramatic degradation (AUROC drops from 0.97+ to 0.42-0.67),
 CLSA's effectiveness stems from three key mechanisms: (1) \textbf{Position elimination}: Summarization removes 75-85\% of original positions, directly eliminating seeded tokens that KGW-family detectors rely on; (2) \textbf{Vocabulary consolidation}: Abstractive summarization favors high-frequency, generic vocabulary over diverse synonyms that may have been seeded; (3) \textbf{Semantic neighborhood disruption}: Cross-lingual summarization can map semantically similar source contexts to dissimilar target contexts, breaking SIR/XSIR clustering assumptions.
 
 \textbf{Comparison with existing attacks.}
-CLSA consistently outperforms alternatives: vs. paraphrasing (AUROC 0.42-0.67 vs. 0.65-0.82), vs. CWRA (0.42-0.67 vs. 0.46-0.82), and vs. back-translation (0.42-0.67 vs. 0.43-0.65), while providing practical length reduction benefits.
+CLSA consistently outperforms alternatives: vs. paraphrasing (AUROC 0.42-0.67 vs. 0.65-0.82) and vs. CWRA (0.42-0.67 vs. 0.46-0.82), while providing practical length reduction benefits.
 
 \textbf{Potential defenses.}
 Defense directions include length-aware detection, multi-modal watermarking combining statistical and cryptographic approaches, and cross-lingual ensemble detection. However, these face fundamental limitations: length restrictions conflict with legitimate use cases, cryptographic approaches require infrastructure changes, and the semantic bottleneck imposed by cross-lingual summarization may be unavoidable without restricting NLP applications.
@@ -180,7 +177,7 @@ Our evaluation has several key limitations: (1) \textbf{Scale}: Five languages a
 
 CLSA represents a simple yet effective watermark removal attack that exploits the fundamental tension between cross-lingual processing and distributional watermark detection. By forcing watermarked text through translation and summarization—operations that are increasingly common in real-world NLP pipelines—CLSA systematically erases statistical traces while preserving semantic content.
 
-Our comprehensive evaluation across four watermarking schemes and five languages demonstrates that this attack consistently drives detection toward chance performance, often outperforming existing approaches while producing shorter, more readable outputs. These findings have immediate implications for watermark deployment and highlight fundamental limitations of purely distributional approaches to AI content verification.
+Our comprehensive evaluation across four watermarking schemes and five languages demonstrates that this attack consistently drives detection toward chance performance while producing shorter, more readable outputs. These findings have immediate implications for watermark deployment and highlight fundamental limitations of purely distributional approaches to AI content verification.
 
 The results call for a fundamental reconsideration of watermarking strategies in multilingual contexts. Future work should focus on developing watermarks that maintain stronger invariants across linguistic and compression boundaries, while also exploring hybrid approaches that combine statistical watermarks with cryptographic verification or model attestation.
 
@@ -213,92 +210,5 @@ The race between watermarking defenders and adversaries is far from over—but o
 \caption{Equal Error Rate (EER): higher values under CLSA indicate reduced separability between watermarked and non-watermarked content.}
 \end{figure}
 
-\clearpage
-
-\section*{NeurIPS Paper Checklist}
-
-\begin{enumerate}
-
-\item {\bf Claims}
-    \item[] Question: Do the main claims made in the abstract and introduction accurately reflect the paper's contributions and scope?
-    \item[] Answer: \answerYes{}
-    \item[] Justification: The abstract and introduction accurately describe our four main contributions: CLSA attack formulation, multi-language/multi-detector evaluation, mechanistic analysis, and defense implications.
-
-\item {\bf Limitations}
-    \item[] Question: Does the paper discuss the limitations of the work performed by the authors?
-    \item[] Answer: \answerYes{}
-    \item[] Justification: Section 7 explicitly covers scope limitations, quality evaluation constraints, model dependencies, and real-world deployment considerations.
-
-\item {\bf Theory assumptions and proofs}
-    \item[] Question: For each theoretical result, does the paper provide the full set of assumptions and a complete (and correct) proof?
-    \item[] Answer: \answerNA{}
-    \item[] Justification: This is an empirical study without formal theoretical results requiring proofs.
-
-\item {\bf Experimental result reproducibility}
-    \item[] Question: Does the paper fully disclose all the information needed to reproduce the main experimental results of the paper to the extent that it affects the main claims and/or conclusions of the paper (regardless of whether the code and data are provided or not)?
-    \item[] Answer: \answerYes{}
-    \item[] Justification: We specify all models (M2M100, mT5/XLSum), detectors, datasets, sample sizes, evaluation metrics, and experimental procedures necessary for reproduction.
-
-\item {\bf Open access to data and code}
-    \item[] Question: Does the paper provide open access to the data and code, with sufficient instructions to faithfully reproduce the main experimental results, as described in supplemental material?
-    \item[] Answer: \answerNo{}
-    \item[] Justification: To preserve double-blind review, we do not link code/data in the submission; we plan to release upon acceptance.
-
-\item {\bf Experimental setting/details}
-    \item[] Question: Does the paper specify all the training and test details (e.g., data splits, hyperparameters, how they were chosen, type of optimizer, etc.) necessary to understand the results?
-    \item[] Answer: \answerYes{}
-    \item[] Justification: Section 4 provides comprehensive experimental details including data splits, model configurations, hyperparameters, and evaluation procedures.
-
-\item {\bf Experiment statistical significance}
-    \item[] Question: Does the paper report error bars suitably and correctly defined or other appropriate information about the statistical significance of the experiments?
-    \item[] Answer: \answerNo{}
-    \item[] Justification: We report point estimates without confidence intervals; this could be addressed in camera-ready with bootstrap confidence intervals.
-
-\item {\bf Experiments compute resources}
-    \item[] Question: For each experiment, does the paper provide sufficient information on the computer resources (type of compute workers, memory, time of execution) needed to reproduce the experiments?
-    \item[] Answer: \answerYes{}
-    \item[] Justification: Section 4 specifies computational requirements: single NVIDIA RTX 4090 GPU with 32GB VRAM, 64GB system RAM, with approximately 3 days total runtime for all experiments.
-
-\item {\bf Code of ethics}
-    \item[] Question: Does the research conducted in the paper conform, in every respect, with the NeurIPS Code of Ethics \url{https://neurips.cc/public/EthicsGuidelines}?
-    \item[] Answer: \answerYes{}
-    \item[] Justification: We follow the NeurIPS Code of Ethics and discuss responsible disclosure and dual-use considerations in Section 8.
-
-\item {\bf Broader impacts}
-    \item[] Question: Does the paper discuss both potential positive societal impacts and negative societal impacts of the work performed?
-    \item[] Answer: \answerYes{}
-    \item[] Justification: Section 8 provides comprehensive discussion of both positive impacts (advancing watermark research) and negative impacts (potential misuse) with mitigation strategies.
-
-\item {\bf Safeguards}
-    \item[] Question: Does the paper describe safeguards that have been put in place for responsible release of data or models that have a high risk for misuse (e.g., pretrained language models, image generators, or scraped datasets)?
-    \item[] Answer: \answerNA{}
-    \item[] Justification: We do not release high-risk models or datasets; our work uses existing public models.
-
-\item {\bf Licenses for existing assets}
-    \item[] Question: Are the creators or original owners of assets (e.g., code, data, models), used in the paper, properly credited and are the license and terms of use explicitly mentioned and properly respected?
-    \item[] Answer: \answerYes{}
-    \item[] Justification: We properly cite all used models (M2M100, mT5, MarkLLM) and respect their respective licenses.
-
-\item {\bf New assets}
-    \item[] Question: Are new assets introduced in the paper well documented and is the documentation provided alongside the assets?
-    \item[] Answer: \answerNA{}
-    \item[] Justification: We do not introduce new models or datasets requiring separate documentation.
-
-\item {\bf Crowdsourcing and research with human subjects}
-    \item[] Question: For crowdsourcing experiments and research with human subjects, does the paper include the full text of instructions given to participants and screenshots, if applicable, as well as details about compensation (if any)?
-    \item[] Answer: \answerNA{}
-    \item[] Justification: No human subjects research was conducted.
-
-\item {\bf Institutional review board (IRB) approvals or equivalent for research with human subjects}
-    \item[] Question: Does the paper describe potential risks incurred by study participants, whether such risks were disclosed to the subjects, and whether Institutional Review Board (IRB) approvals (or an equivalent approval/review based on the requirements of your country or institution) were obtained?
-    \item[] Answer: \answerNA{}
-    \item[] Justification: No human subjects research was conducted.
-
-\item {\bf Declaration of LLM usage}
-    \item[] Question: Does the paper describe the usage of LLMs if it is an important, original, or non-standard component of the core methods in this research? Note that if the LLM is used only for writing, editing, or formatting purposes and does not impact the core methodology, scientific rigorousness, or originality of the research, declaration is not required.
-    \item[] Answer: \answerYes{}
-    \item[] Justification: LLMs are central to our methodology through watermarked text generation, translation (M2M100), and summarization (mT5), all described in Section 4.
-
-\end{enumerate}
 
 \end{document}
