@@ -1,9 +1,5 @@
 # CLSA: Cross-Lingual Summarization Attack on LLM Watermarking
 
-<<<<<<< HEAD
-## 📄 Research Paper
-**[📖 Read the Full Paper](Styles/clsa_independent.pdf)** - *CLSA: Cross-Lingual Summarization Attack on LLM Watermarking*
-=======
 ##  Research Paper
 **[ Read the Full Paper](Styles/clsa_independent.pdf)** - *CLSA: Cross-Lingual Summarization Attack on LLM Watermarking* 
 
