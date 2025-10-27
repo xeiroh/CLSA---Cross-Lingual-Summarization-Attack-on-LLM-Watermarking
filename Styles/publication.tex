@@ -159,7 +159,7 @@ KGW and Unigram show dramatic degradation (AUROC drops from 0.97+ to 0.42-0.67),
 CLSA's effectiveness stems from three key mechanisms: (1) \textbf{Position elimination}: Summarization removes 75-85\% of original positions, directly eliminating seeded tokens that KGW-family detectors rely on; (2) \textbf{Vocabulary consolidation}: Abstractive summarization favors high-frequency, generic vocabulary over diverse synonyms that may have been seeded; (3) \textbf{Semantic neighborhood disruption}: Cross-lingual summarization can map semantically similar source contexts to dissimilar target contexts, breaking SIR/XSIR clustering assumptions.
 
 \textbf{Comparison with existing attacks.}
-CLSA consistently outperforms alternatives: vs. paraphrasing (AUROC 0.42-0.67 vs. 0.65-0.82), vs. CWRA (0.42-0.67 vs. 0.46-0.82), and vs. back-translation (0.42-0.67 vs. 0.43-0.65), while providing practical length reduction benefits.
+CLSA consistently outperforms alternatives: vs. paraphrasing (AUROC 0.42-0.67 vs. 0.65-0.82), vs. CWRA in Chinese (0.53 vs 0.82 - XSIR tested only), and vs. back-translation (0.42-0.67 vs. 0.43-0.65), while providing practical length reduction benefits.
 
 \textbf{Potential defenses.}
 Defense directions include length-aware detection, multi-modal watermarking combining statistical and cryptographic approaches, and cross-lingual ensemble detection. However, these face fundamental limitations: length restrictions conflict with legitimate use cases, cryptographic approaches require infrastructure changes, and the semantic bottleneck imposed by cross-lingual summarization may be unavoidable without restricting NLP applications.
