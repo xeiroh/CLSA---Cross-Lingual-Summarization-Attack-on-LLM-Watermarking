@@ -1,11 +1,16 @@
 # CLSA: Cross-Lingual Summarization Attack on LLM Watermarking
 
+<<<<<<< HEAD
 ## 📄 Research Paper
 **[📖 Read the Full Paper](Styles/clsa_independent.pdf)** - *CLSA: Cross-Lingual Summarization Attack on LLM Watermarking*
+=======
+##  Research Paper
+**[ Read the Full Paper](Styles/publication.pdf)** - *CLSA: Cross-Lingual Summarization Attack on LLM Watermarking* 
+>>>>>>> refs/remotes/origin/gokulganesan
 
 ---
 
-## 🎯 Key Results Summary
+## Key Results Summary
 
 CLSA consistently degrades watermark detection across all tested schemes, pushing detection performance toward chance levels:
 
@@ -23,18 +28,18 @@ CLSA consistently degrades watermark detection across all tested schemes, pushin
 
 ---
 
-## 🔬 Research Overview
+## Research Overview
 
 This repository presents **CLSA (Cross-Lingual Summarization Attack)**, a novel black-box attack against LLM watermarking schemes that combines the effects of translation and summarization to evade detection. Unlike existing translation-based attacks, CLSA simultaneously compresses and translates watermarked text, creating a dual disruption to watermark signals.
 
-### 🚨 Key Findings
+### Key Findings
 
 - **Effective Evasion**: CLSA pushes detection AUROC toward chance levels (≈0.5) across multiple watermarking schemes
 - **Cross-Language Impact**: Attack effectiveness persists across high-resource (English→Chinese, English→Spanish) and lower-resource languages
 - **Practical Threat**: Collapses true positive rates at 1% false positive rate to near-zero levels
 - **Quality Preservation**: Maintains reasonable summary quality while degrading detectability
 
-## 🧪 What CLSA Does
+## What CLSA Does
 
 **Problem**: Current LLM watermarking schemes embed detectable patterns in generated text, but these signals can be disrupted by various text transformations.
 
@@ -46,7 +51,7 @@ This repository presents **CLSA (Cross-Lingual Summarization Attack)**, a novel 
 
 **Why It Works**: The dual effect of compression (reducing text length) and translation (changing linguistic patterns) disrupts the "green-list" token bias and semantic clustering that watermarking algorithms rely on for detection.
 
-## 🔍 Experimental Setup
+## Experimental Setup
 
 ### Watermarking Schemes Tested
 - **KGW**: Green-list watermarking with vocabulary partitioning
@@ -65,7 +70,7 @@ This repository presents **CLSA (Cross-Lingual Summarization Attack)**, a novel 
 2. **Round-trip CLS**: English → Target language → Back to English
 3. **Baseline Comparisons**: Paraphrasing, translation-only attacks
 
-## 📊 Detailed Results
+## Detailed Results
 
 ### Detection Performance Degradation
 
@@ -86,7 +91,7 @@ This repository presents **CLSA (Cross-Lingual Summarization Attack)**, a novel 
 
 *Area Under Precision-Recall Curve shows consistent degradation across all detector-language combinations.*
 
-## 🛡️ Implications for Watermark Security
+## Implications for Watermark Security
 
 ### Attack Effectiveness
 - **Broad Impact**: Affects multiple state-of-the-art watermarking schemes
@@ -98,7 +103,7 @@ This repository presents **CLSA (Cross-Lingual Summarization Attack)**, a novel 
 - **Robustness Gap**: Current watermarking schemes lack sufficient cross-lingual robustness
 - **Quality-Security Tradeoff**: Stronger watermarks may impact text generation quality
 
-## 🏗️ Repository Structure
+## Repository Structure
 
 ```
 ├── Styles/                     # LaTeX paper and publication files
@@ -114,7 +119,7 @@ This repository presents **CLSA (Cross-Lingual Summarization Attack)**, a novel 
 └── requirements.txt          # Python dependencies
 ```
 
-## 🚀 Running the Experiments
+## Running the Experiments
 
 ### Prerequisites
 ```bash
@@ -137,7 +142,7 @@ pip install -r requirements.txt
 
 *Note: Detailed experimental scripts and instructions are available in the `scripts/` directory.*
 
-## 📈 Performance Analysis
+## Performance Analysis
 
 ### Quality Preservation
 CLSA maintains reasonable summary quality while degrading detection:
@@ -150,7 +155,7 @@ CLSA maintains reasonable summary quality while degrading detection:
 - **Model Variants**: Consistent results across different summarization architectures
 - **Decoding Strategies**: Effective with both beam search and sampling-based generation
 
-## 🔮 Future Work
+## Future Work
 
 ### Research Directions
 - **Code-Switching Attacks**: Mixing languages within single outputs
@@ -163,10 +168,8 @@ CLSA maintains reasonable summary quality while degrading detection:
 - **Translation Security**: Implications for watermarked content in translation systems
 - **AI Safety**: Robustness considerations for deployed LLM systems
 
-## ⚖️ Responsible Disclosure
+## Responsible Disclosure
 
 This research is conducted for academic purposes to identify vulnerabilities in watermarking systems and improve their robustness. The findings highlight important security considerations for deployed watermarking schemes and should inform the development of more resilient detection methods.
 
 ---
-
-*This repository contains the complete experimental setup, results, and analysis for NeurIPS 2025 workshop submission on cross-lingual summarization attacks against LLM watermarking.*
